@@ -137,9 +137,9 @@ pub fn compareInt(name: []const u8, expected: u64, actual: u64) void {
 //--------------------------------------------------------------------------------
 pub fn pass(name: []const u8, message: []const u8) void {
     //----------------------------------------------------------------------------
-    _ = stderr.write(GREEN) catch {};
-    _ = stdout.write("PASS") catch {};
-    _ = stderr.write(RESET) catch {};
+    _ = stderr.writeAll(GREEN) catch {};
+    _ = stdout.writeAll("PASS") catch {};
+    _ = stderr.writeAll(RESET) catch {};
     //----------------------------------------
     if (message.len == 0) {
         stdout.print(": {s}\n", .{name}) catch {};
@@ -155,9 +155,9 @@ pub fn pass(name: []const u8, message: []const u8) void {
 //--------------------------------------------------------------------------------
 pub fn fail(name: []const u8, message: []const u8) void {
     //----------------------------------------------------------------------------
-    _ = stderr.write(RED) catch {};
-    _ = stdout.write("FAIL") catch {};
-    _ = stderr.write(RESET) catch {};
+    _ = stderr.writeAll(RED) catch {};
+    _ = stdout.writeAll("FAIL") catch {};
+    _ = stderr.writeAll(RESET) catch {};
     //----------------------------------------
     if (message.len == 0) {
         stdout.print(": {s}\n", .{name}) catch {};
@@ -173,9 +173,9 @@ pub fn fail(name: []const u8, message: []const u8) void {
 //--------------------------------------------------------------------------------
 pub fn errorPass(name: []const u8, err: anyerror) void {
     //----------------------------------------------------------------------------
-    _ = stderr.write(GREEN) catch {};
-    _ = stdout.write("PASS") catch {};
-    _ = stderr.write(RESET) catch {};
+    _ = stderr.writeAll(GREEN) catch {};
+    _ = stdout.writeAll("PASS") catch {};
+    _ = stderr.writeAll(RESET) catch {};
     //----------------------------------------
     stdout.print(": {s} (correctly returned {})\n", .{ name, err }) catch {};
     //----------------------------------------
@@ -187,9 +187,9 @@ pub fn errorPass(name: []const u8, err: anyerror) void {
 //--------------------------------------------------------------------------------
 pub fn errorFail(name: []const u8, err: anyerror) void {
     //----------------------------------------------------------------------------
-    _ = stderr.write(RED) catch {};
-    _ = stdout.write("FAIL") catch {};
-    _ = stderr.write(RESET) catch {};
+    _ = stderr.writeAll(RED) catch {};
+    _ = stdout.writeAll("FAIL") catch {};
+    _ = stderr.writeAll(RESET) catch {};
     //----------------------------------------
     stdout.print(": {s}: ERROR: {}\n", .{ name, err }) catch {};
     //----------------------------------------
@@ -212,9 +212,9 @@ pub fn printFail() void {
     printColour(RED, "FAIL");
 }
 pub fn printColour(color: []const u8, string: []const u8) void {
-    _ = stderr.write(color) catch {};
-    _ = stdout.write(string) catch {};
-    _ = stderr.write(RESET) catch {};
+    _ = stderr.writeAll(color) catch {};
+    _ = stdout.writeAll(string) catch {};
+    _ = stderr.writeAll(RESET) catch {};
 }
 //--------------------------------------------------------------------------------
 pub fn printLine() void {

@@ -18,7 +18,7 @@ tasks:
   build:
     dir: "{{.OUTPUT_PATH}}"
     cmds:
-      - zig build-exe ../main.zig  -femit-bin={{.OUTPUT}} -fstrip -O ${ZIG_BUILD_MODE} -target native -mcpu=baseline
+      - zig015 build-exe ../main.zig  -femit-bin={{.OUTPUT}} -fstrip -O ${ZIG_BUILD_MODE} -target native -mcpu=baseline
 
   run:
     dir: "{{.OUTPUT_PATH}}"
@@ -28,5 +28,5 @@ tasks:
           if [ -x "{{.OUTPUT}}" ]; then
             ./{{.OUTPUT}} {{.CLI_ARGS}}
           else
-            zig run ../main.zig -- {{.CLI_ARGS}}
+            zig015 run ../main.zig -- {{.CLI_ARGS}}
           fi

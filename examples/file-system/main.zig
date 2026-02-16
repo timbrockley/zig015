@@ -119,7 +119,7 @@ pub fn main() !void {
 
         var dirIterator = dir.iterate();
         while (try dirIterator.next()) |dirContent| {
-            std.debug.print("openDir: {}:\t {s}\n", .{ dirContent.kind, dirContent.name });
+            std.debug.print("openDir: {}: {s}\n", .{ dirContent.kind, dirContent.name });
         }
         std.debug.print("\n", .{});
     }

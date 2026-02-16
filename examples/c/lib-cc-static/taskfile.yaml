@@ -12,9 +12,9 @@ tasks:
   build:
     dir: "{{.OUTPUT_PATH}}"
     cmds:
-      - zig cc -o math.o -c ../math.c
-      - zig ar rcs libmath.a math.o
-      - zig cc -o lib-cc-static ../main.c -L. -lmath -target native -mcpu=baseline
+      - zig015 cc -o math.o -c ../math.c
+      - zig015 ar rcs libmath.a math.o
+      - zig015 cc -o lib-cc-static ../main.c -L. -lmath -target native -mcpu=baseline
       - rm -rf libmath.a math.o
 
   run:

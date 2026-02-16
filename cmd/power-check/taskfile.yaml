@@ -20,22 +20,22 @@ tasks:
   build:
     dir: "{{.OUTPUT_PATH}}"
     cmds:
-      - zig build-exe ../{{.SOURCE}} -femit-bin={{.OUTPUT}} -fstrip -O ${ZIG_BUILD_MODE} -target native -mcpu=baseline
+      - zig015 build-exe ../{{.SOURCE}} -femit-bin={{.OUTPUT}} -fstrip -O ${ZIG_BUILD_MODE} -target native -mcpu=baseline
 
   build-linux:
     dir: "{{.OUTPUT_PATH}}"
     cmds:
-      - zig build-exe ../{{.SOURCE}} -femit-bin={{.OUTPUT}} -fstrip -O ${ZIG_BUILD_MODE} -target x86_64-linux -mcpu=baseline
+      - zig015 build-exe ../{{.SOURCE}} -femit-bin={{.OUTPUT}} -fstrip -O ${ZIG_BUILD_MODE} -target x86_64-linux -mcpu=baseline
 
   build-macos:
     dir: "{{.OUTPUT_PATH}}"
     cmds:
-      - zig build-exe ../{{.SOURCE}} -femit-bin={{.OUTPUT}}-darwin -fstrip -O ${ZIG_BUILD_MODE} -target x86_64-macos -mcpu=baseline
+      - zig015 build-exe ../{{.SOURCE}} -femit-bin={{.OUTPUT}}-darwin -fstrip -O ${ZIG_BUILD_MODE} -target x86_64-macos -mcpu=baseline
 
   build-windows:
     dir: "{{.OUTPUT_PATH}}"
     cmds:
-      - zig build-exe ../{{.SOURCE}} -femit-bin={{.OUTPUT}}-windows.exe -fstrip -O ${ZIG_BUILD_MODE} -target x86_64-windows -mcpu=baseline
+      - zig015 build-exe ../{{.SOURCE}} -femit-bin={{.OUTPUT}}-windows.exe -fstrip -O ${ZIG_BUILD_MODE} -target x86_64-windows -mcpu=baseline
 
   deploy:
     deps: [build, build-windows]
@@ -58,5 +58,5 @@ tasks:
           if [ -x "{{.OUTPUT}}" ]; then
             ./{{.OUTPUT}} {{.CLI_ARGS}}
           else
-            zig run ../{{.SOURCE}} -- {{.CLI_ARGS}}
+            zig015 run ../{{.SOURCE}} -- {{.CLI_ARGS}}
           fi
