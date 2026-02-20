@@ -18,8 +18,8 @@ var count_failed: usize = 0;
 //--------------------------------------------------------------------------------
 const BLUE = "\x1B[34m";
 const MAGENTA = "\x1B[35m";
-const RED = "\x1B[91m";
-const GREEN = "\x1B[92m";
+const RED = "\x1B[31m";
+const GREEN = "\x1B[32m";
 const RESET = "\x1B[0m";
 //--------------------------------------------------------------------------------
 pub fn init() void {
