@@ -3,16 +3,16 @@ const std = @import("std");
 const ut = @import("libs/unittest.zig");
 const obf = @import("crypto.zig");
 //--------------------------------------------------------------------------------
+const BRIGHT_ORANGE = "\x1B[38;5;214m";
+const RESET = "\x1B[0m";
+//--------------------------------------------------------------------------------
 pub fn main() !void {
     //----------------------------------------------------------------------------
     ut.init();
     //----------------------------------------------------------------------------
-    // var gpa = std.heap.GeneralPurposeAllocator(.{}){};
-    // defer _ = gpa.deinit();
-    // const allocator = gpa.allocator();
-    var arena_allocator = std.heap.ArenaAllocator.init(std.heap.page_allocator);
-    defer arena_allocator.deinit();
-    var allocator = arena_allocator.allocator();
+    var gpa = std.heap.GeneralPurposeAllocator(.{}){};
+    defer if (gpa.deinit() == .leak) std.debug.print("{s}!!! MEMORY LEAK DETECTED !!!{s}\n\n", .{ BRIGHT_ORANGE, RESET });
+    const allocator = gpa.allocator();
     //----------------------------------------------------------------------------
     {
         //----------------------------------------
@@ -38,7 +38,7 @@ pub fn main() !void {
         //----------------------------------------
         inline for (test_cases) |test_case| {
             //----------------------------------------
-            if (obf.ObfuscateV0.obfuscate(&allocator, test_case.data, .{})) |result| {
+            if (obf.ObfuscateV0.obfuscate(allocator, test_case.data, .{})) |result| {
                 //----------------------------------------
                 if (!std.mem.eql(u8, result, test_case.expected)) {
                     //----------------------------------------
@@ -112,7 +112,7 @@ pub fn main() !void {
         //----------------------------------------
         inline for (test_cases) |test_case| {
             //----------------------------------------
-            if (obf.ObfuscateV0.encode(&allocator, test_case.data, .{ .encoding = test_case.encoding })) |result| {
+            if (obf.ObfuscateV0.encode(allocator, test_case.data, .{ .encoding = test_case.encoding })) |result| {
                 //----------------------------------------
                 if (!std.mem.eql(u8, result, test_case.expected)) {
                     //----------------------------------------
@@ -158,7 +158,7 @@ pub fn main() !void {
         //----------------------------------------
         inline for (test_cases) |test_case| {
             //----------------------------------------
-            if (obf.ObfuscateV0.decode(&allocator, test_case.data, .{ .encoding = test_case.encoding })) |result| {
+            if (obf.ObfuscateV0.decode(allocator, test_case.data, .{ .encoding = test_case.encoding })) |result| {
                 //----------------------------------------
                 if (!std.mem.eql(u8, result, test_case.expected)) {
                     //----------------------------------------
@@ -211,7 +211,7 @@ pub fn main() !void {
         //----------------------------------------
         inline for (test_cases) |test_case| {
             //----------------------------------------
-            if (obf.ObfuscateV4.obfuscate(&allocator, test_case.data, .{ .mix_chars = test_case.mix_chars })) |result| {
+            if (obf.ObfuscateV4.obfuscate(allocator, test_case.data, .{ .mix_chars = test_case.mix_chars })) |result| {
                 //----------------------------------------
                 if (!std.mem.eql(u8, result, test_case.expected)) {
                     //----------------------------------------
@@ -293,7 +293,7 @@ pub fn main() !void {
         //----------------------------------------
         inline for (test_cases) |test_case| {
             //----------------------------------------
-            if (obf.ObfuscateV4.encode(&allocator, test_case.data, .{ .encoding = test_case.encoding, .mix_chars = test_case.mix_chars })) |result| {
+            if (obf.ObfuscateV4.encode(allocator, test_case.data, .{ .encoding = test_case.encoding, .mix_chars = test_case.mix_chars })) |result| {
                 //----------------------------------------
                 if (!std.mem.eql(u8, result, test_case.expected)) {
                     //----------------------------------------
@@ -347,7 +347,7 @@ pub fn main() !void {
         //----------------------------------------
         inline for (test_cases) |test_case| {
             //----------------------------------------
-            if (obf.ObfuscateV4.decode(&allocator, test_case.data, .{ .encoding = test_case.encoding, .mix_chars = test_case.mix_chars })) |result| {
+            if (obf.ObfuscateV4.decode(allocator, test_case.data, .{ .encoding = test_case.encoding, .mix_chars = test_case.mix_chars })) |result| {
                 //----------------------------------------
                 if (!std.mem.eql(u8, result, test_case.expected)) {
                     //----------------------------------------
@@ -413,7 +413,7 @@ pub fn main() !void {
         //----------------------------------------
         inline for (test_cases) |test_case| {
             //----------------------------------------
-            if (obf.ObfuscateV5.obfuscate(&allocator, test_case.data, .{})) |result| {
+            if (obf.ObfuscateV5.obfuscate(allocator, test_case.data, .{})) |result| {
                 //----------------------------------------
                 if (!std.mem.eql(u8, result, test_case.expected)) {
                     //----------------------------------------
@@ -493,7 +493,7 @@ pub fn main() !void {
         //----------------------------------------
         inline for (test_cases) |test_case| {
             //----------------------------------------
-            if (obf.ObfuscateV5.encode(&allocator, test_case.data, .{ .encoding = test_case.encoding })) |result| {
+            if (obf.ObfuscateV5.encode(allocator, test_case.data, .{ .encoding = test_case.encoding })) |result| {
                 //----------------------------------------
                 if (!std.mem.eql(u8, result, test_case.expected)) {
                     //----------------------------------------
@@ -545,7 +545,7 @@ pub fn main() !void {
         //----------------------------------------
         inline for (test_cases) |test_case| {
             //----------------------------------------
-            if (obf.ObfuscateV5.decode(&allocator, test_case.data, .{ .encoding = test_case.encoding })) |result| {
+            if (obf.ObfuscateV5.decode(allocator, test_case.data, .{ .encoding = test_case.encoding })) |result| {
                 //----------------------------------------
                 if (!std.mem.eql(u8, result, test_case.expected)) {
                     //----------------------------------------
@@ -591,7 +591,7 @@ pub fn main() !void {
         //----------------------------------------
         inline for (test_cases) |test_case| {
             //----------------------------------------
-            if (obf.ObfuscateXOR.obfuscate(&allocator, test_case.data, value, .{})) |result| {
+            if (obf.ObfuscateXOR.obfuscate(allocator, test_case.data, value, .{})) |result| {
                 //----------------------------------------
                 if (!std.mem.eql(u8, result, test_case.expected)) {
                     //----------------------------------------
@@ -638,7 +638,7 @@ pub fn main() !void {
         //----------------------------------------
         inline for (test_cases) |test_case| {
             //----------------------------------------
-            if (obf.ObfuscateXOR.encode(&allocator, test_case.data, value, .{ .encoding = test_case.encoding })) |result| {
+            if (obf.ObfuscateXOR.encode(allocator, test_case.data, value, .{ .encoding = test_case.encoding })) |result| {
                 //----------------------------------------
                 if (!std.mem.eql(u8, result, test_case.expected)) {
                     //----------------------------------------
@@ -689,7 +689,7 @@ pub fn main() !void {
         //----------------------------------------
         inline for (test_cases) |test_case| {
             //----------------------------------------
-            if (obf.ObfuscateXOR.decode(&allocator, test_case.data, value, .{ .encoding = test_case.encoding })) |result| {
+            if (obf.ObfuscateXOR.decode(allocator, test_case.data, value, .{ .encoding = test_case.encoding })) |result| {
                 //----------------------------------------
                 if (!std.mem.eql(u8, result, test_case.expected)) {
                     //----------------------------------------

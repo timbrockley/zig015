@@ -7,6 +7,9 @@ const std = @import("std");
 
 const MAX_OUTPUT_BYTES: usize = 50 * 1024;
 
+const BRIGHT_ORANGE = "\x1B[38;5;214m";
+const RESET = "\x1B[0m";
+
 //--------------------------------------------------------------------------------
 
 pub fn childProcessPreallocated(
@@ -101,12 +104,8 @@ pub fn childProcessOwnedSlice(
 pub fn main() !void {
     //------------------------------------------------------------
     var gpa = std.heap.GeneralPurposeAllocator(.{}){};
-    defer _ = gpa.deinit();
+    defer if (gpa.deinit() == .leak) std.debug.print("{s}!!! MEMORY LEAK DETECTED !!!{s}\n\n", .{ BRIGHT_ORANGE, RESET });
     const allocator = gpa.allocator();
-    //------------------------------------------------------------
-    // var arena_allocator = std.heap.ArenaAllocator.init(std.heap.page_allocator);
-    // defer arena_allocator.deinit();
-    // const allocator = arena_allocator.allocator();
     //------------------------------------------------------------
     {
         //------------------------------------------------------------

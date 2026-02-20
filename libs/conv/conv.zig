@@ -9,7 +9,7 @@ pub const Base = struct {
     //------------------------------------------------------------
     pub const Error = error{InvalidInput};
     //------------------------------------------------------------
-    pub fn encode(allocator: *std.mem.Allocator, data: []const u8, options: anytype) ![]u8 {
+    pub fn encode(allocator: std.mem.Allocator, data: []const u8, options: anytype) ![]u8 {
         //------------------------------------------------------------
         _ = options;
         //------------------------------------------------------------
@@ -71,7 +71,7 @@ pub const Base = struct {
         //------------------------------------------------------------
     }
     //------------------------------------------------------------
-    pub fn decode(allocator: *std.mem.Allocator, data: []const u8, options: anytype) ![]u8 {
+    pub fn decode(allocator: std.mem.Allocator, data: []const u8, options: anytype) ![]u8 {
         //------------------------------------------------------------
         _ = options;
         //------------------------------------------------------------
@@ -174,7 +174,7 @@ pub const Base64 = struct {
         pad_char: ?u8 = null,
     };
     //------------------------------------------------------------
-    pub fn encode(allocator: *std.mem.Allocator, data: []const u8, options: anytype) ![]u8 {
+    pub fn encode(allocator: std.mem.Allocator, data: []const u8, options: anytype) ![]u8 {
         //------------------------------------------------------------
         if (data.len == 0) return allocator.alloc(u8, 0);
         //------------------------------------------------------------
@@ -231,7 +231,7 @@ pub const Base64 = struct {
         //------------------------------------------------------------
     }
     //------------------------------------------------------------
-    pub fn decode(allocator: *std.mem.Allocator, data: []const u8, options: anytype) ![]u8 {
+    pub fn decode(allocator: std.mem.Allocator, data: []const u8, options: anytype) ![]u8 {
         //------------------------------------------------------------
         if (data.len == 0) return allocator.alloc(u8, 0);
         //------------------------------------------------------------
@@ -268,11 +268,11 @@ pub const Base64 = struct {
         //------------------------------------------------------------
     }
     //------------------------------------------------------------
-    pub fn urlEncode(allocator: *std.mem.Allocator, data: []const u8, options: anytype) ![]u8 {
+    pub fn urlEncode(allocator: std.mem.Allocator, data: []const u8, options: anytype) ![]u8 {
         return encode(allocator, data, setOptions(DefaultsUrl, options));
     }
     //------------------------------------------------------------
-    pub fn urlDecode(allocator: *std.mem.Allocator, data: []const u8, options: anytype) ![]u8 {
+    pub fn urlDecode(allocator: std.mem.Allocator, data: []const u8, options: anytype) ![]u8 {
         return decode(allocator, data, setOptions(DefaultsUrl, options));
     }
     //------------------------------------------------------------
@@ -402,7 +402,7 @@ pub const Base85 = struct {
         wrap: bool = false,
     };
     //------------------------------------------------------------
-    pub fn encode(allocator: *std.mem.Allocator, data: []const u8, options: anytype) ![]u8 {
+    pub fn encode(allocator: std.mem.Allocator, data: []const u8, options: anytype) ![]u8 {
         //------------------------------------------------------------
         if (data.len == 0) return allocator.alloc(u8, 0);
         //------------------------------------------------------------
@@ -529,7 +529,7 @@ pub const Base85 = struct {
         //------------------------------------------------------------
     }
     //------------------------------------------------------------
-    pub fn decode(allocator: *std.mem.Allocator, data: []const u8, options: anytype) ![]u8 {
+    pub fn decode(allocator: std.mem.Allocator, data: []const u8, options: anytype) ![]u8 {
         //------------------------------------------------------------
         if (data.len == 0) return allocator.alloc(u8, 0);
         //------------------------------------------------------------
@@ -551,7 +551,7 @@ pub const Base85 = struct {
         //------------------------------------------------------------
         if (opts.replace_zero) {
             //-----------------------------------
-            _data = try std.mem.replaceOwned(u8, allocator.*, _data, "z", "!!!!!");
+            _data = try std.mem.replaceOwned(u8, allocator, _data, "z", "!!!!!");
             //-----------------------------------
             data_ptr = _data.ptr;
             data_len = _data.len;
@@ -692,7 +692,7 @@ pub const Base91 = struct {
     //------------------------------------------------------------
     pub const Defaults = struct { escape: bool = false };
     //------------------------------------------------------------
-    pub fn encode(allocator: *std.mem.Allocator, data: []const u8, options: anytype) ![]u8 {
+    pub fn encode(allocator: std.mem.Allocator, data: []const u8, options: anytype) ![]u8 {
         //-----------------------------------------------------------
         if (data.len == 0) return allocator.alloc(u8, 0);
         //-----------------------------------------------------------
@@ -768,7 +768,7 @@ pub const Base91 = struct {
         //-----------------------------------------------------------
     }
     //------------------------------------------------------------
-    pub fn decode(allocator: *std.mem.Allocator, data: []const u8, options: anytype) ![]u8 {
+    pub fn decode(allocator: std.mem.Allocator, data: []const u8, options: anytype) ![]u8 {
         //-----------------------------------------------------------
         if (data.len == 0) return allocator.alloc(u8, 0);
         //-----------------------------------------------------------
@@ -880,17 +880,17 @@ pub const Hex = struct {
     //------------------------------------------------------------
     pub const Error = error{InvalidInputLength};
     //------------------------------------------------------------
-    pub fn encode(allocator: *std.mem.Allocator, data: []const u8, options: anytype) ![]u8 {
+    pub fn encode(allocator: std.mem.Allocator, data: []const u8, options: anytype) ![]u8 {
         //-----------------------------------------------------------
         _ = options;
         //------------------------------------------------------------
         if (data.len == 0) return allocator.alloc(u8, 0);
         //------------------------------------------------------------
-        return try std.fmt.allocPrint(allocator.*, "{X}", .{data});
+        return try std.fmt.allocPrint(allocator, "{X}", .{data});
         //-----------------------------------------------------------
     }
     //------------------------------------------------------------
-    pub fn decode(allocator: *std.mem.Allocator, data: []const u8, options: anytype) ![]u8 {
+    pub fn decode(allocator: std.mem.Allocator, data: []const u8, options: anytype) ![]u8 {
         //-----------------------------------------------------------
         _ = options;
         //------------------------------------------------------------
