@@ -748,10 +748,6 @@ pub const ObfuscateXOR = struct {
         //------------------------------------------------------------
     }
     //------------------------------------------------------------
-    // todo => allocator: std.mem.Allocator remove * ???????
-    //
-    //
-    //
     pub fn decode(allocator: std.mem.Allocator, data: []const u8, value: u8, options: anytype) ![]u8 {
         //------------------------------------------------------------
         if (data.len == 0) return allocator.alloc(u8, 0);

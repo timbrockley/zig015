@@ -1,6 +1,6 @@
 //--------------------------------------------------------------------------------
 const std = @import("std");
-const ut = @import("libs/unittest.zig");
+const unittest = @import("libs/unittest.zig");
 const obf = @import("crypto.zig");
 //--------------------------------------------------------------------------------
 const BRIGHT_ORANGE = "\x1B[38;5;214m";
@@ -8,7 +8,7 @@ const RESET = "\x1B[0m";
 //--------------------------------------------------------------------------------
 pub fn main() !void {
     //----------------------------------------------------------------------------
-    ut.init();
+    var ut = try unittest.init(.{});
     //----------------------------------------------------------------------------
     var gpa = std.heap.GeneralPurposeAllocator(.{}){};
     defer if (gpa.deinit() == .leak) std.debug.print("{s}!!! MEMORY LEAK DETECTED !!!{s}\n\n", .{ BRIGHT_ORANGE, RESET });
@@ -44,7 +44,7 @@ pub fn main() !void {
                     //----------------------------------------
                     fail_count += 1;
                     //----------------------------------------
-                    ut.compareByteSlice(name, test_case.expected, result);
+                    try ut.compareByteSlice(name, test_case.expected, result);
                     allocator.free(result);
                     //----------------------------------------
                 }
@@ -52,13 +52,13 @@ pub fn main() !void {
             } else |err| {
                 //----------------------------------------
                 fail_count += 1;
-                ut.errorFail(name, err);
+                try ut.errorFail(name, err);
                 //----------------------------------------
             }
             //----------------------------------------
         }
         //----------------------------------------
-        if (fail_count == 0) ut.pass(name, "");
+        if (fail_count == 0) try ut.pass(name, "");
         //----------------------------------------
     }
     //----------------------------------------------------------------------------
@@ -86,12 +86,12 @@ pub fn main() !void {
             //----------------------------------------
             if (result != test_case.expected) {
                 fail_count += 1;
-                ut.compareByte(name, test_case.expected, result);
+                try ut.compareByte(name, test_case.expected, result);
             }
             //----------------------------------------
         }
         //----------------------------------------
-        if (fail_count == 0) ut.pass(name, "");
+        if (fail_count == 0) try ut.pass(name, "");
         //----------------------------------------
     }
     //----------------------------------------------------------------------------
@@ -119,9 +119,9 @@ pub fn main() !void {
                     fail_count += 1;
                     //----------------------------------------
                     if (test_case.encoding == .default) {
-                        ut.compareByteSlice(name, test_case.expected, result);
+                        try ut.compareByteSlice(name, test_case.expected, result);
                     } else {
-                        ut.compareStringSlice(name, test_case.expected, result);
+                        try ut.compareStringSlice(name, test_case.expected, result);
                     }
                     //----------------------------------------
                     allocator.free(result);
@@ -131,13 +131,13 @@ pub fn main() !void {
             } else |err| {
                 //----------------------------------------
                 fail_count += 1;
-                ut.errorFail(name, err);
+                try ut.errorFail(name, err);
                 //----------------------------------------
             }
             //----------------------------------------
         }
         //----------------------------------------
-        if (fail_count == 0) ut.pass(name, "");
+        if (fail_count == 0) try ut.pass(name, "");
         //----------------------------------------
     }
     //----------------------------------------------------------------------------
@@ -165,9 +165,9 @@ pub fn main() !void {
                     fail_count += 1;
                     //----------------------------------------
                     if (test_case.encoding == .default) {
-                        ut.compareByteSlice(name, test_case.expected, result);
+                        try ut.compareByteSlice(name, test_case.expected, result);
                     } else {
-                        ut.compareStringSlice(name, test_case.expected, result);
+                        try ut.compareStringSlice(name, test_case.expected, result);
                     }
                     //----------------------------------------
                     allocator.free(result);
@@ -177,13 +177,13 @@ pub fn main() !void {
             } else |err| {
                 //----------------------------------------
                 fail_count += 1;
-                ut.errorFail(name, err);
+                try ut.errorFail(name, err);
                 //----------------------------------------
             }
             //----------------------------------------
         }
         //----------------------------------------
-        if (fail_count == 0) ut.pass(name, "");
+        if (fail_count == 0) try ut.pass(name, "");
         //----------------------------------------
     }
     //----------------------------------------------------------------------------
@@ -217,7 +217,7 @@ pub fn main() !void {
                     //----------------------------------------
                     fail_count += 1;
                     //----------------------------------------
-                    ut.compareByteSlice(name, test_case.expected, result);
+                    try ut.compareByteSlice(name, test_case.expected, result);
                     allocator.free(result);
                     //----------------------------------------
                 }
@@ -225,13 +225,13 @@ pub fn main() !void {
             } else |err| {
                 //----------------------------------------
                 fail_count += 1;
-                ut.errorFail(name, err);
+                try ut.errorFail(name, err);
                 //----------------------------------------
             }
             //----------------------------------------
         }
         //----------------------------------------
-        if (fail_count == 0) ut.pass(name, "");
+        if (fail_count == 0) try ut.pass(name, "");
         //----------------------------------------
     }
     //----------------------------------------------------------------------------
@@ -259,12 +259,12 @@ pub fn main() !void {
             //----------------------------------------
             if (result != test_case.expected) {
                 fail_count += 1;
-                ut.compareByte(name, test_case.expected, result);
+                try ut.compareByte(name, test_case.expected, result);
             }
             //----------------------------------------
         }
         //----------------------------------------
-        if (fail_count == 0) ut.pass(name, "");
+        if (fail_count == 0) try ut.pass(name, "");
         //----------------------------------------
     }
     //----------------------------------------------------------------------------
@@ -300,9 +300,9 @@ pub fn main() !void {
                     fail_count += 1;
                     //----------------------------------------
                     if (test_case.encoding == .default) {
-                        ut.compareByteSlice(name, test_case.expected, result);
+                        try ut.compareByteSlice(name, test_case.expected, result);
                     } else {
-                        ut.compareStringSlice(name, test_case.expected, result);
+                        try ut.compareStringSlice(name, test_case.expected, result);
                     }
                     //----------------------------------------
                     allocator.free(result);
@@ -312,13 +312,13 @@ pub fn main() !void {
             } else |err| {
                 //----------------------------------------
                 fail_count += 1;
-                ut.errorFail(name, err);
+                try ut.errorFail(name, err);
                 //----------------------------------------
             }
             //----------------------------------------
         }
         //----------------------------------------
-        if (fail_count == 0) ut.pass(name, "");
+        if (fail_count == 0) try ut.pass(name, "");
         //----------------------------------------
     }
     //----------------------------------------------------------------------------
@@ -354,9 +354,9 @@ pub fn main() !void {
                     fail_count += 1;
                     //----------------------------------------
                     if (test_case.encoding == .default) {
-                        ut.compareByteSlice(name, test_case.expected, result);
+                        try ut.compareByteSlice(name, test_case.expected, result);
                     } else {
-                        ut.compareStringSlice(name, test_case.expected, result);
+                        try ut.compareStringSlice(name, test_case.expected, result);
                     }
                     //----------------------------------------
                     allocator.free(result);
@@ -366,13 +366,13 @@ pub fn main() !void {
             } else |err| {
                 //----------------------------------------
                 fail_count += 1;
-                ut.errorFail(name, err);
+                try ut.errorFail(name, err);
                 //----------------------------------------
             }
             //----------------------------------------
         }
         //----------------------------------------
-        if (fail_count == 0) ut.pass(name, "");
+        if (fail_count == 0) try ut.pass(name, "");
         //----------------------------------------
     }
     //----------------------------------------------------------------------------
@@ -419,7 +419,7 @@ pub fn main() !void {
                     //----------------------------------------
                     fail_count += 1;
                     //----------------------------------------
-                    ut.compareByteSlice(name, test_case.expected, result);
+                    try ut.compareByteSlice(name, test_case.expected, result);
                     allocator.free(result);
                     //----------------------------------------
                 }
@@ -427,13 +427,13 @@ pub fn main() !void {
             } else |err| {
                 //----------------------------------------
                 fail_count += 1;
-                ut.errorFail(name, err);
+                try ut.errorFail(name, err);
                 //----------------------------------------
             }
             //----------------------------------------
         }
         //----------------------------------------
-        if (fail_count == 0) ut.pass(name, "");
+        if (fail_count == 0) try ut.pass(name, "");
         //----------------------------------------
     }
     //----------------------------------------------------------------------------
@@ -461,12 +461,12 @@ pub fn main() !void {
             //----------------------------------------
             if (result != test_case.expected) {
                 fail_count += 1;
-                ut.compareByte(name, test_case.expected, result);
+                try ut.compareByte(name, test_case.expected, result);
             }
             //----------------------------------------
         }
         //----------------------------------------
-        if (fail_count == 0) ut.pass(name, "");
+        if (fail_count == 0) try ut.pass(name, "");
         //----------------------------------------
     }
     //----------------------------------------------------------------------------
@@ -500,9 +500,9 @@ pub fn main() !void {
                     fail_count += 1;
                     //----------------------------------------
                     if (test_case.encoding == .default) {
-                        ut.compareByteSlice(name, test_case.expected, result);
+                        try ut.compareByteSlice(name, test_case.expected, result);
                     } else {
-                        ut.compareStringSlice(name, test_case.expected, result);
+                        try ut.compareStringSlice(name, test_case.expected, result);
                     }
                     //----------------------------------------
                     allocator.free(result);
@@ -512,13 +512,13 @@ pub fn main() !void {
             } else |err| {
                 //----------------------------------------
                 fail_count += 1;
-                ut.errorFail(name, err);
+                try ut.errorFail(name, err);
                 //----------------------------------------
             }
             //----------------------------------------
         }
         //----------------------------------------
-        if (fail_count == 0) ut.pass(name, "");
+        if (fail_count == 0) try ut.pass(name, "");
         //----------------------------------------
     }
     //----------------------------------------------------------------------------
@@ -552,9 +552,9 @@ pub fn main() !void {
                     fail_count += 1;
                     //----------------------------------------
                     if (test_case.encoding == .default) {
-                        ut.compareByteSlice(name, test_case.expected, result);
+                        try ut.compareByteSlice(name, test_case.expected, result);
                     } else {
-                        ut.compareStringSlice(name, test_case.expected, result);
+                        try ut.compareStringSlice(name, test_case.expected, result);
                     }
                     //----------------------------------------
                     allocator.free(result);
@@ -564,13 +564,13 @@ pub fn main() !void {
             } else |err| {
                 //----------------------------------------
                 fail_count += 1;
-                ut.errorFail(name, err);
+                try ut.errorFail(name, err);
                 //----------------------------------------
             }
             //----------------------------------------
         }
         //----------------------------------------
-        if (fail_count == 0) ut.pass(name, "");
+        if (fail_count == 0) try ut.pass(name, "");
         //----------------------------------------
     }
     //----------------------------------------------------------------------------
@@ -597,7 +597,7 @@ pub fn main() !void {
                     //----------------------------------------
                     fail_count += 1;
                     //----------------------------------------
-                    ut.compareByteSlice(name, test_case.expected, result);
+                    try ut.compareByteSlice(name, test_case.expected, result);
                     allocator.free(result);
                     //----------------------------------------
                 }
@@ -605,13 +605,13 @@ pub fn main() !void {
             } else |err| {
                 //----------------------------------------
                 fail_count += 1;
-                ut.errorFail(name, err);
+                try ut.errorFail(name, err);
                 //----------------------------------------
             }
             //----------------------------------------
         }
         //----------------------------------------
-        if (fail_count == 0) ut.pass(name, "");
+        if (fail_count == 0) try ut.pass(name, "");
         //----------------------------------------
     }
     //----------------------------------------------------------------------------
@@ -645,9 +645,9 @@ pub fn main() !void {
                     fail_count += 1;
                     //----------------------------------------
                     if (test_case.encoding == .default) {
-                        ut.compareByteSlice(name, test_case.expected, result);
+                        try ut.compareByteSlice(name, test_case.expected, result);
                     } else {
-                        ut.compareStringSlice(name, test_case.expected, result);
+                        try ut.compareStringSlice(name, test_case.expected, result);
                     }
                     //----------------------------------------
                     allocator.free(result);
@@ -657,13 +657,13 @@ pub fn main() !void {
             } else |err| {
                 //----------------------------------------
                 fail_count += 1;
-                ut.errorFail(name, err);
+                try ut.errorFail(name, err);
                 //----------------------------------------
             }
             //----------------------------------------
         }
         //----------------------------------------
-        if (fail_count == 0) ut.pass(name, "");
+        if (fail_count == 0) try ut.pass(name, "");
         //----------------------------------------
     }
     //----------------------------------------------------------------------------
@@ -696,9 +696,9 @@ pub fn main() !void {
                     fail_count += 1;
                     //----------------------------------------
                     if (test_case.encoding == .default) {
-                        ut.compareByteSlice(name, test_case.expected, result);
+                        try ut.compareByteSlice(name, test_case.expected, result);
                     } else {
-                        ut.compareStringSlice(name, test_case.expected, result);
+                        try ut.compareStringSlice(name, test_case.expected, result);
                     }
                     //----------------------------------------
                     allocator.free(result);
@@ -708,17 +708,17 @@ pub fn main() !void {
             } else |err| {
                 //----------------------------------------
                 fail_count += 1;
-                ut.errorFail(name, err);
+                try ut.errorFail(name, err);
                 //----------------------------------------
             }
             //----------------------------------------
         }
         //----------------------------------------
-        if (fail_count == 0) ut.pass(name, "");
+        if (fail_count == 0) try ut.pass(name, "");
         //----------------------------------------
     }
     //----------------------------------------------------------------------------
-    ut.printSummary();
+    try ut.printSummary();
     //----------------------------------------------------------------------------
 }
 //--------------------------------------------------------------------------------
