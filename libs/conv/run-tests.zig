@@ -1,6 +1,6 @@
 //--------------------------------------------------------------------------------
 const std = @import("std");
-const ut = @import("libs/unittest.zig");
+const unittest = @import("libs/unittest.zig");
 const conv = @import("conv.zig");
 //--------------------------------------------------------------------------------
 const BRIGHT_ORANGE = "\x1B[38;5;214m";
@@ -8,7 +8,7 @@ const RESET = "\x1B[0m";
 //--------------------------------------------------------------------------------
 pub fn main() !void {
     //----------------------------------------------------------------------------
-    ut.init();
+    var ut = try unittest.init(.{});
     //----------------------------------------------------------------------------
     var gpa = std.heap.GeneralPurposeAllocator(.{}){};
     defer if (gpa.deinit() == .leak) std.debug.print("{s}!!! MEMORY LEAK DETECTED !!!{s}\n\n", .{ BRIGHT_ORANGE, RESET });
@@ -23,23 +23,23 @@ pub fn main() !void {
         //----------------------------------------
         if (conv.Base.encode(allocator, data, .{})) |result| {
             //----------------------------------------
-            ut.compareStringSlice(name1, expected, result);
+            try ut.compareStringSlice(name1, expected, result);
             defer allocator.free(result);
             //----------------------------------------
         } else |err| {
             //----------------------------------------
-            ut.errorFail(name1, err);
+            try ut.errorFail(name1, err);
             //----------------------------------------
         }
         //----------------------------------------
         if (conv.Base.decode(allocator, expected, .{})) |result| {
             //----------------------------------------
-            ut.compareStringSlice(name2, data, result);
+            try ut.compareStringSlice(name2, data, result);
             defer allocator.free(result);
             //----------------------------------------
         } else |err| {
             //----------------------------------------
-            ut.errorFail(name2, err);
+            try ut.errorFail(name2, err);
             //----------------------------------------
         }
         //----------------------------------------
@@ -54,23 +54,23 @@ pub fn main() !void {
         //----------------------------------------
         if (conv.Base.encode(allocator, data, .{})) |result| {
             //----------------------------------------
-            ut.compareStringSlice(name1, expected, result);
+            try ut.compareStringSlice(name1, expected, result);
             defer allocator.free(result);
             //----------------------------------------
         } else |err| {
             //----------------------------------------
-            ut.errorFail(name1, err);
+            try ut.errorFail(name1, err);
             //----------------------------------------
         }
         //----------------------------------------
         if (conv.Base.decode(allocator, expected, .{})) |result| {
             //----------------------------------------
-            ut.compareStringSlice(name2, data, result);
+            try ut.compareStringSlice(name2, data, result);
             defer allocator.free(result);
             //----------------------------------------
         } else |err| {
             //----------------------------------------
-            ut.errorFail(name2, err);
+            try ut.errorFail(name2, err);
             //----------------------------------------
         }
         //----------------------------------------
@@ -85,23 +85,23 @@ pub fn main() !void {
         //----------------------------------------
         if (conv.Base.encode(allocator, data, .{})) |result| {
             //----------------------------------------
-            ut.compareStringSlice(name1, expected, result);
+            try ut.compareStringSlice(name1, expected, result);
             defer allocator.free(result);
             //----------------------------------------
         } else |err| {
             //----------------------------------------
-            ut.errorFail(name1, err);
+            try ut.errorFail(name1, err);
             //----------------------------------------
         }
         //----------------------------------------
         if (conv.Base.decode(allocator, expected, .{})) |result| {
             //----------------------------------------
-            ut.compareStringSlice(name2, data, result);
+            try ut.compareStringSlice(name2, data, result);
             defer allocator.free(result);
             //----------------------------------------
         } else |err| {
             //----------------------------------------
-            ut.errorFail(name2, err);
+            try ut.errorFail(name2, err);
             //----------------------------------------
         }
         //----------------------------------------
@@ -116,23 +116,23 @@ pub fn main() !void {
         //----------------------------------------
         if (conv.Base.encode(allocator, data, .{})) |result| {
             //----------------------------------------
-            ut.compareStringSlice(name1, expected, result);
+            try ut.compareStringSlice(name1, expected, result);
             defer allocator.free(result);
             //----------------------------------------
         } else |err| {
             //----------------------------------------
-            ut.errorFail(name1, err);
+            try ut.errorFail(name1, err);
             //----------------------------------------
         }
         //----------------------------------------
         if (conv.Base.decode(allocator, expected, .{})) |result| {
             //----------------------------------------
-            ut.compareStringSlice(name2, data, result);
+            try ut.compareStringSlice(name2, data, result);
             defer allocator.free(result);
             //----------------------------------------
         } else |err| {
             //----------------------------------------
-            ut.errorFail(name2, err);
+            try ut.errorFail(name2, err);
             //----------------------------------------
         }
         //----------------------------------------
@@ -147,23 +147,23 @@ pub fn main() !void {
         //----------------------------------------
         if (conv.Base.encode(allocator, data, .{})) |result| {
             //----------------------------------------
-            ut.compareStringSlice(name1, expected, result);
+            try ut.compareStringSlice(name1, expected, result);
             defer allocator.free(result);
             //----------------------------------------
         } else |err| {
             //----------------------------------------
-            ut.errorFail(name1, err);
+            try ut.errorFail(name1, err);
             //----------------------------------------
         }
         //----------------------------------------
         if (conv.Base.decode(allocator, expected, .{})) |result| {
             //----------------------------------------
-            ut.compareStringSlice(name2, data, result);
+            try ut.compareStringSlice(name2, data, result);
             defer allocator.free(result);
             //----------------------------------------
         } else |err| {
             //----------------------------------------
-            ut.errorFail(name2, err);
+            try ut.errorFail(name2, err);
             //----------------------------------------
         }
         //----------------------------------------
@@ -178,23 +178,23 @@ pub fn main() !void {
         //----------------------------------------
         if (conv.Base.encode(allocator, data, .{})) |result| {
             //----------------------------------------
-            ut.compareStringSlice(name1, expected, result);
+            try ut.compareStringSlice(name1, expected, result);
             defer allocator.free(result);
             //----------------------------------------
         } else |err| {
             //----------------------------------------
-            ut.errorFail(name1, err);
+            try ut.errorFail(name1, err);
             //----------------------------------------
         }
         //----------------------------------------
         if (conv.Base.decode(allocator, expected, .{})) |result| {
             //----------------------------------------
-            ut.compareStringSlice(name2, data, result);
+            try ut.compareStringSlice(name2, data, result);
             defer allocator.free(result);
             //----------------------------------------
         } else |err| {
             //----------------------------------------
-            ut.errorFail(name2, err);
+            try ut.errorFail(name2, err);
             //----------------------------------------
         }
         //----------------------------------------
@@ -209,23 +209,23 @@ pub fn main() !void {
         //----------------------------------------
         if (conv.Base64.encode(allocator, data, .{})) |result| {
             //----------------------------------------
-            ut.compareStringSlice(name1, expected, result);
+            try ut.compareStringSlice(name1, expected, result);
             defer allocator.free(result);
             //----------------------------------------
         } else |err| {
             //----------------------------------------
-            ut.errorFail(name1, err);
+            try ut.errorFail(name1, err);
             //----------------------------------------
         }
         //----------------------------------------
         if (conv.Base64.decode(allocator, data, .{})) |result| {
             //----------------------------------------
-            ut.compareStringSlice(name2, expected, result);
+            try ut.compareStringSlice(name2, expected, result);
             defer allocator.free(result);
             //----------------------------------------
         } else |err| {
             //----------------------------------------
-            ut.errorFail(name2, err);
+            try ut.errorFail(name2, err);
             //----------------------------------------
         }
         //----------------------------------------
@@ -240,23 +240,23 @@ pub fn main() !void {
         //----------------------------------------
         if (conv.Base64.encode(allocator, data, .{})) |result| {
             //----------------------------------------
-            ut.compareStringSlice(name1, expected, result);
+            try ut.compareStringSlice(name1, expected, result);
             defer allocator.free(result);
             //----------------------------------------
         } else |err| {
             //----------------------------------------
-            ut.errorFail(name1, err);
+            try ut.errorFail(name1, err);
             //----------------------------------------
         }
         //----------------------------------------
         if (conv.Base64.decode(allocator, expected, .{})) |result| {
             //----------------------------------------
-            ut.compareStringSlice(name1, data, result);
+            try ut.compareStringSlice(name1, data, result);
             defer allocator.free(result);
             //----------------------------------------
         } else |err| {
             //----------------------------------------
-            ut.errorFail(name2, err);
+            try ut.errorFail(name2, err);
             //----------------------------------------
         }
         //----------------------------------------
@@ -271,23 +271,23 @@ pub fn main() !void {
         //----------------------------------------
         if (conv.Base64.encode(allocator, data, .{})) |result| {
             //----------------------------------------
-            ut.compareStringSlice(name1, expected, result);
+            try ut.compareStringSlice(name1, expected, result);
             defer allocator.free(result);
             //----------------------------------------
         } else |err| {
             //----------------------------------------
-            ut.errorFail(name1, err);
+            try ut.errorFail(name1, err);
             //----------------------------------------
         }
         //----------------------------------------
         if (conv.Base64.decode(allocator, expected, .{})) |result| {
             //----------------------------------------
-            ut.compareStringSlice(name2, data, result);
+            try ut.compareStringSlice(name2, data, result);
             defer allocator.free(result);
             //----------------------------------------
         } else |err| {
             //----------------------------------------
-            ut.errorFail(name2, err);
+            try ut.errorFail(name2, err);
             //----------------------------------------
         }
         //----------------------------------------
@@ -302,23 +302,23 @@ pub fn main() !void {
         //----------------------------------------
         if (conv.Base64.urlEncode(allocator, data, .{})) |result| {
             //----------------------------------------
-            ut.compareStringSlice(name1, expected, result);
+            try ut.compareStringSlice(name1, expected, result);
             defer allocator.free(result);
             //----------------------------------------
         } else |err| {
             //----------------------------------------
-            ut.errorFail(name1, err);
+            try ut.errorFail(name1, err);
             //----------------------------------------
         }
         //----------------------------------------
         if (conv.Base64.urlDecode(allocator, expected, .{})) |result| {
             //----------------------------------------
-            ut.compareByteSlice(name2, data, result);
+            try ut.compareByteSlice(name2, data, result);
             defer allocator.free(result);
             //----------------------------------------
         } else |err| {
             //----------------------------------------
-            ut.errorFail(name2, err);
+            try ut.errorFail(name2, err);
             //----------------------------------------
         }
     }
@@ -330,11 +330,11 @@ pub fn main() !void {
         //----------------------------------------
         if (conv.Base64.base64Value(byte)) |_| {
             //----------------------------------------
-            ut.fail(name, "test failed as it did not return an error");
+            try ut.fail(name, "test failed as it did not return an error");
             //----------------------------------------
         } else |err| {
             //----------------------------------------
-            ut.errorPass(name, err); // should return an error
+            try ut.errorPass(name, err); // should return an error
             //----------------------------------------
         }
         //----------------------------------------
@@ -358,13 +358,13 @@ pub fn main() !void {
                 //----------------------------------------
             } else |err| {
                 //----------------------------------------
-                ut.errorFail(name, err);
+                try ut.errorFail(name, err);
                 //----------------------------------------
             }
             //----------------------------------------
         }
         //----------------------------------------
-        ut.compareByteSlice(name, expected[0..], result[0..]);
+        try ut.compareByteSlice(name, expected[0..], result[0..]);
         //----------------------------------------
     }
     //----------------------------------------------------------------------------
@@ -378,7 +378,7 @@ pub fn main() !void {
             total += conv.Base64.plaintextToBase64Length(data);
         }
 
-        ut.compareInt(name, expected_total, total);
+        try ut.compareInt(name, expected_total, total);
     }
     //----------------------------------------------------------------------------
     {
@@ -386,9 +386,9 @@ pub fn main() !void {
         const data = "A"; // invalid input
 
         if (conv.Base64.base64ToPlaintextLength(data)) |_| {
-            ut.fail(name, "test failed as it did not return an error");
+            try ut.fail(name, "test failed as it did not return an error");
         } else |err| {
-            ut.errorPass(name, err); // should return an error
+            try ut.errorPass(name, err); // should return an error
         }
     }
     //----------------------------------------------------------------------------
@@ -402,11 +402,11 @@ pub fn main() !void {
             if (conv.Base64.base64ToPlaintextLength(data)) |length| {
                 total += length;
             } else |err| {
-                ut.errorFail(name, err);
+                try ut.errorFail(name, err);
             }
         }
 
-        ut.compareInt(name, expected_total, total);
+        try ut.compareInt(name, expected_total, total);
     }
     //----------------------------------------------------------------------------
     {
@@ -419,7 +419,7 @@ pub fn main() !void {
             total += conv.Base64.base64UrlToPlaintextLength(data);
         }
 
-        ut.compareInt(name, expected_total, total);
+        try ut.compareInt(name, expected_total, total);
     }
     //----------------------------------------------------------------------------
     {
@@ -432,7 +432,7 @@ pub fn main() !void {
             total += conv.Base64.base64ToBase64UrlLength(data);
         }
 
-        ut.compareInt(name, expected_total, total);
+        try ut.compareInt(name, expected_total, total);
     }
     //----------------------------------------------------------------------------
     {
@@ -445,7 +445,7 @@ pub fn main() !void {
             total += conv.Base64.base64UrlToBase64Length(data);
         }
 
-        ut.compareInt(name, expected_total, total);
+        try ut.compareInt(name, expected_total, total);
     }
     //----------------------------------------------------------------------------
     {
@@ -457,23 +457,23 @@ pub fn main() !void {
         //----------------------------------------
         if (conv.Base85.encode(allocator, data, .{})) |result| {
             //----------------------------------------
-            ut.compareStringSlice(name1, expected, result);
+            try ut.compareStringSlice(name1, expected, result);
             defer allocator.free(result);
             //----------------------------------------
         } else |err| {
             //----------------------------------------
-            ut.errorFail(name1, err);
+            try ut.errorFail(name1, err);
             //----------------------------------------
         }
         //----------------------------------------
         if (conv.Base85.decode(allocator, expected, .{})) |result| {
             //----------------------------------------
-            ut.compareStringSlice(name2, data, result);
+            try ut.compareStringSlice(name2, data, result);
             defer allocator.free(result);
             //----------------------------------------
         } else |err| {
             //----------------------------------------
-            ut.errorFail(name2, err);
+            try ut.errorFail(name2, err);
             //----------------------------------------
         }
         //----------------------------------------
@@ -488,23 +488,23 @@ pub fn main() !void {
         //----------------------------------------
         if (conv.Base85.encode(allocator, data, .{})) |result| {
             //----------------------------------------
-            ut.compareStringSlice(name1, expected, result);
+            try ut.compareStringSlice(name1, expected, result);
             defer allocator.free(result);
             //----------------------------------------
         } else |err| {
             //----------------------------------------
-            ut.errorFail(name1, err);
+            try ut.errorFail(name1, err);
             //----------------------------------------
         }
         //----------------------------------------
         if (conv.Base85.decode(allocator, expected, .{})) |result| {
             //----------------------------------------
-            ut.compareStringSlice(name2, data, result);
+            try ut.compareStringSlice(name2, data, result);
             defer allocator.free(result);
             //----------------------------------------
         } else |err| {
             //----------------------------------------
-            ut.errorFail(name2, err);
+            try ut.errorFail(name2, err);
             //----------------------------------------
         }
         //----------------------------------------
@@ -519,23 +519,23 @@ pub fn main() !void {
         //----------------------------------------
         if (conv.Base85.encode(allocator, data, .{})) |result| {
             //----------------------------------------
-            ut.compareStringSlice(name1, expected, result);
+            try ut.compareStringSlice(name1, expected, result);
             defer allocator.free(result);
             //----------------------------------------
         } else |err| {
             //----------------------------------------
-            ut.errorFail(name1, err);
+            try ut.errorFail(name1, err);
             //----------------------------------------
         }
         //----------------------------------------
         if (conv.Base85.decode(allocator, expected, .{})) |result| {
             //----------------------------------------
-            ut.compareStringSlice(name2, data, result);
+            try ut.compareStringSlice(name2, data, result);
             defer allocator.free(result);
             //----------------------------------------
         } else |err| {
             //----------------------------------------
-            ut.errorFail(name2, err);
+            try ut.errorFail(name2, err);
             //----------------------------------------
         }
         //----------------------------------------
@@ -550,23 +550,23 @@ pub fn main() !void {
         //----------------------------------------
         if (conv.Base85.encode(allocator, data, .{})) |result| {
             //----------------------------------------
-            ut.compareStringSlice(name1, expected, result);
+            try ut.compareStringSlice(name1, expected, result);
             defer allocator.free(result);
             //----------------------------------------
         } else |err| {
             //----------------------------------------
-            ut.errorFail(name1, err);
+            try ut.errorFail(name1, err);
             //----------------------------------------
         }
         //----------------------------------------
         if (conv.Base85.decode(allocator, expected, .{})) |result| {
             //----------------------------------------
-            ut.compareStringSlice(name2, data, result);
+            try ut.compareStringSlice(name2, data, result);
             defer allocator.free(result);
             //----------------------------------------
         } else |err| {
             //----------------------------------------
-            ut.errorFail(name2, err);
+            try ut.errorFail(name2, err);
             //----------------------------------------
         }
         //----------------------------------------
@@ -581,23 +581,23 @@ pub fn main() !void {
         //----------------------------------------
         if (conv.Base85.encode(allocator, data, .{})) |result| {
             //----------------------------------------
-            ut.compareStringSlice(name1, expected, result);
+            try ut.compareStringSlice(name1, expected, result);
             defer allocator.free(result);
             //----------------------------------------
         } else |err| {
             //----------------------------------------
-            ut.errorFail(name1, err);
+            try ut.errorFail(name1, err);
             //----------------------------------------
         }
         //----------------------------------------
         if (conv.Base85.decode(allocator, expected, .{})) |result| {
             //----------------------------------------
-            ut.compareStringSlice(name2, data, result);
+            try ut.compareStringSlice(name2, data, result);
             defer allocator.free(result);
             //----------------------------------------
         } else |err| {
             //----------------------------------------
-            ut.errorFail(name2, err);
+            try ut.errorFail(name2, err);
             //----------------------------------------
         }
         //----------------------------------------
@@ -612,23 +612,23 @@ pub fn main() !void {
         //----------------------------------------
         if (conv.Base85.encode(allocator, data, .{})) |result| {
             //----------------------------------------
-            ut.compareStringSlice(name1, expected, result);
+            try ut.compareStringSlice(name1, expected, result);
             defer allocator.free(result);
             //----------------------------------------
         } else |err| {
             //----------------------------------------
-            ut.errorFail(name1, err);
+            try ut.errorFail(name1, err);
             //----------------------------------------
         }
         //----------------------------------------
         if (conv.Base85.decode(allocator, expected, .{})) |result| {
             //----------------------------------------
-            ut.compareStringSlice(name2, data, result);
+            try ut.compareStringSlice(name2, data, result);
             defer allocator.free(result);
             //----------------------------------------
         } else |err| {
             //----------------------------------------
-            ut.errorFail(name2, err);
+            try ut.errorFail(name2, err);
             //----------------------------------------
         }
         //----------------------------------------
@@ -644,23 +644,23 @@ pub fn main() !void {
         //----------------------------------------
         if (conv.Base85.encode(allocator, data, .{ .escape = true, .replace_zero = true, .trim = true, .wrap = true })) |result| {
             //----------------------------------------
-            ut.compareStringSlice(name1, expected, result);
+            try ut.compareStringSlice(name1, expected, result);
             defer allocator.free(result);
             //----------------------------------------
         } else |err| {
             //----------------------------------------
-            ut.errorFail(name1, err);
+            try ut.errorFail(name1, err);
             //----------------------------------------
         }
         //----------------------------------------
         if (conv.Base85.decode(allocator, encoded_data, .{ .escape = true, .replace_zero = true, .trim = true, .wrap = true })) |result| {
             //----------------------------------------
-            ut.compareStringSlice(name2, data, result);
+            try ut.compareStringSlice(name2, data, result);
             defer allocator.free(result);
             //----------------------------------------
         } else |err| {
             //----------------------------------------
-            ut.errorFail(name2, err);
+            try ut.errorFail(name2, err);
             //----------------------------------------
         }
         //----------------------------------------
@@ -676,23 +676,23 @@ pub fn main() !void {
         //----------------------------------------
         if (conv.Base85.encode(allocator, data, .{ .escape = true, .replace_zero = true, .trim = true, .wrap = true })) |result| {
             //----------------------------------------
-            ut.compareStringSlice(name1, expected, result);
+            try ut.compareStringSlice(name1, expected, result);
             defer allocator.free(result);
             //----------------------------------------
         } else |err| {
             //----------------------------------------
-            ut.errorFail(name1, err);
+            try ut.errorFail(name1, err);
             //----------------------------------------
         }
         //----------------------------------------
         if (conv.Base85.decode(allocator, encoded_data, .{ .escape = true, .replace_zero = true, .trim = true, .wrap = true })) |result| {
             //----------------------------------------
-            ut.compareStringSlice(name2, data, result);
+            try ut.compareStringSlice(name2, data, result);
             defer allocator.free(result);
             //----------------------------------------
         } else |err| {
             //----------------------------------------
-            ut.errorFail(name2, err);
+            try ut.errorFail(name2, err);
             //----------------------------------------
         }
         //----------------------------------------
@@ -707,23 +707,23 @@ pub fn main() !void {
         //----------------------------------------
         if (conv.Base85.encode(allocator, data, .{})) |result| {
             //----------------------------------------
-            ut.compareStringSlice(name1, expected, result);
+            try ut.compareStringSlice(name1, expected, result);
             defer allocator.free(result);
             //----------------------------------------
         } else |err| {
             //----------------------------------------
-            ut.errorFail(name1, err);
+            try ut.errorFail(name1, err);
             //----------------------------------------
         }
         //----------------------------------------
         if (conv.Base85.decode(allocator, expected, .{})) |result| {
             //----------------------------------------
-            ut.compareStringSlice(name2, data, result);
+            try ut.compareStringSlice(name2, data, result);
             defer allocator.free(result);
             //----------------------------------------
         } else |err| {
             //----------------------------------------
-            ut.errorFail(name2, err);
+            try ut.errorFail(name2, err);
             //----------------------------------------
         }
         //----------------------------------------
@@ -738,23 +738,23 @@ pub fn main() !void {
         //----------------------------------------
         if (conv.Base91.encode(allocator, data, .{})) |result| {
             //----------------------------------------
-            ut.compareStringSlice(name1, expected, result);
+            try ut.compareStringSlice(name1, expected, result);
             defer allocator.free(result);
             //----------------------------------------
         } else |err| {
             //----------------------------------------
-            ut.errorFail(name1, err);
+            try ut.errorFail(name1, err);
             //----------------------------------------
         }
         //----------------------------------------
         if (conv.Base91.decode(allocator, expected, .{})) |result| {
             //----------------------------------------
-            ut.compareStringSlice(name2, data, result);
+            try ut.compareStringSlice(name2, data, result);
             defer allocator.free(result);
             //----------------------------------------
         } else |err| {
             //----------------------------------------
-            ut.errorFail(name2, err);
+            try ut.errorFail(name2, err);
             //----------------------------------------
         }
         //----------------------------------------
@@ -769,23 +769,23 @@ pub fn main() !void {
         //----------------------------------------
         if (conv.Base91.encode(allocator, data, .{ .escape = true })) |result| {
             //----------------------------------------
-            ut.compareStringSlice(name1, expected, result);
+            try ut.compareStringSlice(name1, expected, result);
             defer allocator.free(result);
             //----------------------------------------
         } else |err| {
             //----------------------------------------
-            ut.errorFail(name1, err);
+            try ut.errorFail(name1, err);
             //----------------------------------------
         }
         //----------------------------------------
         if (conv.Base91.decode(allocator, expected, .{ .escape = true })) |result| {
             //----------------------------------------
-            ut.compareStringSlice(name2, data, result);
+            try ut.compareStringSlice(name2, data, result);
             defer allocator.free(result);
             //----------------------------------------
         } else |err| {
             //----------------------------------------
-            ut.errorFail(name2, err);
+            try ut.errorFail(name2, err);
             //----------------------------------------
         }
         //----------------------------------------
@@ -800,23 +800,23 @@ pub fn main() !void {
         //----------------------------------------
         if (conv.Base91.encode(allocator, data, .{})) |result| {
             //----------------------------------------
-            ut.compareStringSlice(name1, expected, result);
+            try ut.compareStringSlice(name1, expected, result);
             defer allocator.free(result);
             //----------------------------------------
         } else |err| {
             //----------------------------------------
-            ut.errorFail(name1, err);
+            try ut.errorFail(name1, err);
             //----------------------------------------
         }
         //----------------------------------------
         if (conv.Base91.decode(allocator, expected, .{})) |result| {
             //----------------------------------------
-            ut.compareStringSlice(name2, data, result);
+            try ut.compareStringSlice(name2, data, result);
             defer allocator.free(result);
             //----------------------------------------
         } else |err| {
             //----------------------------------------
-            ut.errorFail(name2, err);
+            try ut.errorFail(name2, err);
             //----------------------------------------
         }
         //----------------------------------------
@@ -831,23 +831,23 @@ pub fn main() !void {
         //----------------------------------------
         if (conv.Base91.encode(allocator, data, .{ .escape = true })) |result| {
             //----------------------------------------
-            ut.compareStringSlice(name1, expected, result);
+            try ut.compareStringSlice(name1, expected, result);
             defer allocator.free(result);
             //----------------------------------------
         } else |err| {
             //----------------------------------------
-            ut.errorFail(name1, err);
+            try ut.errorFail(name1, err);
             //----------------------------------------
         }
         //----------------------------------------
         if (conv.Base91.decode(allocator, expected, .{ .escape = true })) |result| {
             //----------------------------------------
-            ut.compareStringSlice(name2, data, result);
+            try ut.compareStringSlice(name2, data, result);
             defer allocator.free(result);
             //----------------------------------------
         } else |err| {
             //----------------------------------------
-            ut.errorFail(name2, err);
+            try ut.errorFail(name2, err);
             //----------------------------------------
         }
         //----------------------------------------
@@ -861,12 +861,12 @@ pub fn main() !void {
         //----------------------------------------
         if (conv.Hex.encode(allocator, data, .{})) |result| {
             //----------------------------------------
-            ut.compareStringSlice(name, expected, result);
+            try ut.compareStringSlice(name, expected, result);
             defer allocator.free(result);
             //----------------------------------------
         } else |err| {
             //----------------------------------------
-            ut.errorFail(name, err);
+            try ut.errorFail(name, err);
             //----------------------------------------
         }
         //----------------------------------------
@@ -880,21 +880,21 @@ pub fn main() !void {
         //----------------------------------------
         if (conv.Hex.decode(allocator, data1, .{})) |_| {
             //----------------------------------------
-            ut.fail(name, "test failed as it did not return an error");
+            try ut.fail(name, "test failed as it did not return an error");
             //----------------------------------------
         } else |err| {
             //----------------------------------------
-            ut.errorPass(name, err); // should return an error
+            try ut.errorPass(name, err); // should return an error
             //----------------------------------------
         }
         //----------------------------------------
         if (conv.Hex.decode(allocator, data2, .{})) |_| {
             //----------------------------------------
-            ut.fail(name, "test failed as it did not return an error");
+            try ut.fail(name, "test failed as it did not return an error");
             //----------------------------------------
         } else |err| {
             //----------------------------------------
-            ut.errorPass(name, err); // should return an error
+            try ut.errorPass(name, err); // should return an error
             //----------------------------------------
         }
         //----------------------------------------
@@ -908,18 +908,18 @@ pub fn main() !void {
         //----------------------------------------
         if (conv.Hex.decode(allocator, data, .{})) |result| {
             //----------------------------------------
-            ut.compareStringSlice(name, expected, result);
+            try ut.compareStringSlice(name, expected, result);
             defer allocator.free(result);
             //----------------------------------------
         } else |err| {
             //----------------------------------------
-            ut.errorFail(name, err);
+            try ut.errorFail(name, err);
             //----------------------------------------
         }
         //----------------------------------------
     }
     //----------------------------------------------------------------------------
-    ut.printSummary();
+    try ut.printSummary();
     //----------------------------------------------------------------------------
 }
 //--------------------------------------------------------------------------------
