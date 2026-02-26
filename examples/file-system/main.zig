@@ -86,14 +86,14 @@ pub fn main() !void {
         const stat = try file.stat();
 
         var buffer1: [100]u8 = undefined;
-        try file.seekTo(0); // required if reading data aftr
+        try file.seekTo(0); // required if reading data after
         // readAll (deprecated)
         const bytesRead1 = try file.readAll(&buffer1);
 
         var buffer2 = try allocator.alloc(u8, stat.size);
         defer allocator.free(buffer2);
 
-        try file.seekTo(0); // required if reading data aftr
+        try file.seekTo(0); // required if reading data after
         // readAll (deprecated)
         const bytesRead2 = try file.readAll(buffer2);
 

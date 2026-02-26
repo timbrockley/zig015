@@ -54,10 +54,10 @@ pub fn main() !void {
         //------------------------------------------------------------
         const stdin_file = std.fs.File.stdin();
         //------------------------------------------------------------
-        const stdin_stat_info = try stdin_file.stat();
+        const stdin_stat = try stdin_file.stat();
         //------------------------------------------------------------
 
-        if (stdin_stat_info.kind != .character_device) {
+        if (stdin_stat.kind != .character_device) {
 
             //------------------------------------------------------------
             // piped from another process or terminal
