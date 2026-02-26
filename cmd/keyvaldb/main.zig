@@ -214,9 +214,9 @@ pub fn setKey(allocator: std.mem.Allocator, directory: []const u8, key: []const 
     defer file.close();
     //------------------------------------------------------------
     const stdin_file = std.fs.File.stdin();
-    const stdin_info = try stdin_file.stat();
+    const stdin_stat = try stdin_file.stat();
     //------------------------------------------------------------
-    if (value.len == 0 and stdin_info.kind != .character_device) {
+    if (value.len == 0 and stdin_stat.kind != .character_device) {
         //----------------------------------------
         const data = try stdin_file.readToEndAlloc(allocator, std.math.maxInt(usize));
         defer allocator.free(data);
