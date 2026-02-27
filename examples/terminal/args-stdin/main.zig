@@ -53,11 +53,10 @@ pub fn main() !void {
 
         //------------------------------------------------------------
         const stdin_file = std.fs.File.stdin();
-        //------------------------------------------------------------
-        const stdin_stat = try stdin_file.stat();
-        //------------------------------------------------------------
 
-        if (stdin_stat.kind != .character_device) {
+        // const stdin_stat = try stdin_file.stat();
+        // if (stdin_stat.kind != .character_device) {
+        if (!stdin_file.isTty()) {
 
             //------------------------------------------------------------
             // piped from another process or terminal
