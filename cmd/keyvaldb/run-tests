@@ -71,22 +71,30 @@ zig-run ../main.zig test remove k2 >"${STDOUT}" 2>"${STDERR}"
 zig-run ../main.zig test list >"${STDOUT}" 2>"${STDERR}"
 [ -s "${STDOUT}" ] && OUTPUT=$(cat "${STDOUT}"); [ ! -s "${STDOUT}" ] && OUTPUT=$(cat "${STDERR}")
 [[ ! "${OUTPUT}" =~ "KEY  VALUE" ]] && echo "(${LINENO}) invalid response" >> ${ERROR_LOG}
-#--------------------------------------------------------------------------------
-zig-run ../main.zig test list >"${STDOUT}" 2>"${STDERR}"
-[ -s "${STDOUT}" ] && OUTPUT=$(cat "${STDOUT}"); [ ! -s "${STDOUT}" ] && OUTPUT=$(cat "${STDERR}")
-[[ ! "${OUTPUT}" =~ "KEY  VALUE" ]] && echo "(${LINENO}) invalid response" >> ${ERROR_LOG}
-#--------------------------------------------------------------------------------
-zig-run ../main.zig test list >"${STDOUT}" 2>"${STDERR}"
-[ -s "${STDOUT}" ] && OUTPUT=$(cat "${STDOUT}"); [ ! -s "${STDOUT}" ] && OUTPUT=$(cat "${STDERR}")
 [[ ! "${OUTPUT}" =~ "k1   v1" ]] && echo "(${LINENO}) invalid response" >> ${ERROR_LOG}
-#--------------------------------------------------------------------------------
-zig-run ../main.zig test list >"${STDOUT}" 2>"${STDERR}"
-[ -s "${STDOUT}" ] && OUTPUT=$(cat "${STDOUT}"); [ ! -s "${STDOUT}" ] && OUTPUT=$(cat "${STDERR}")
+[[ "${OUTPUT}" =~ "k2   v2" ]] && echo "(${LINENO}) invalid response" >> ${ERROR_LOG}
 [[ ! "${OUTPUT}" =~ "k3   STDIN_DATA" ]] && echo "(${LINENO}) invalid response" >> ${ERROR_LOG}
+[[ ! "${OUTPUT}" =~ "k4   v4" ]] && echo "(${LINENO}) invalid response" >> ${ERROR_LOG}
+#--------------------------------------------------------------------------------
+zig-run ../main.zig test remove k1 >"${STDOUT}" 2>"${STDERR}"
+[ -s "${STDOUT}" ] && OUTPUT=$(cat "${STDOUT}"); [ ! -s "${STDOUT}" ] && OUTPUT=$(cat "${STDERR}")
+[[ "${OUTPUT}" != "" ]] && echo "(${LINENO}) invalid response" >> ${ERROR_LOG}
+#--------------------------------------------------------------------------------
+zig-run ../main.zig test remove k2 >"${STDOUT}" 2>"${STDERR}"
+[ -s "${STDOUT}" ] && OUTPUT=$(cat "${STDOUT}"); [ ! -s "${STDOUT}" ] && OUTPUT=$(cat "${STDERR}")
+[[ "${OUTPUT}" != "" ]] && echo "(${LINENO}) invalid response" >> ${ERROR_LOG}
+#--------------------------------------------------------------------------------
+zig-run ../main.zig test remove k3 >"${STDOUT}" 2>"${STDERR}"
+[ -s "${STDOUT}" ] && OUTPUT=$(cat "${STDOUT}"); [ ! -s "${STDOUT}" ] && OUTPUT=$(cat "${STDERR}")
+[[ "${OUTPUT}" != "" ]] && echo "(${LINENO}) invalid response" >> ${ERROR_LOG}
+#--------------------------------------------------------------------------------
+zig-run ../main.zig test remove k4 >"${STDOUT}" 2>"${STDERR}"
+[ -s "${STDOUT}" ] && OUTPUT=$(cat "${STDOUT}"); [ ! -s "${STDOUT}" ] && OUTPUT=$(cat "${STDERR}")
+[[ "${OUTPUT}" != "" ]] && echo "(${LINENO}) invalid response" >> ${ERROR_LOG}
 #--------------------------------------------------------------------------------
 zig-run ../main.zig test list >"${STDOUT}" 2>"${STDERR}"
 [ -s "${STDOUT}" ] && OUTPUT=$(cat "${STDOUT}"); [ ! -s "${STDOUT}" ] && OUTPUT=$(cat "${STDERR}")
-[[ ! "${OUTPUT}" =~ "k4   v4" ]] && echo "(${LINENO}) invalid response" >> ${ERROR_LOG}
+[[ ! "${OUTPUT}" =~ "no key-value pairs exist" ]] && echo "(${LINENO}) invalid response" >> ${ERROR_LOG}
 #--------------------------------------------------------------------------------
 zig-run ../main.zig test drop >"${STDOUT}" 2>"${STDERR}"
 [ -s "${STDOUT}" ] && OUTPUT=$(cat "${STDOUT}"); [ ! -s "${STDOUT}" ] && OUTPUT=$(cat "${STDERR}")

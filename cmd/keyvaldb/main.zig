@@ -214,9 +214,10 @@ pub fn setKey(allocator: std.mem.Allocator, directory: []const u8, key: []const 
     defer file.close();
     //------------------------------------------------------------
     const stdin_file = std.fs.File.stdin();
-    const stdin_stat = try stdin_file.stat();
     //------------------------------------------------------------
-    if (value.len == 0 and stdin_stat.kind != .character_device) {
+    // const stdin_stat = try stdin_file.stat();
+    // if (value.len == 0 and stdin_stat.kind != .character_device) {
+    if (value.len == 0 and !stdin_file.isTty()) {
         //----------------------------------------
         const data = try stdin_file.readToEndAlloc(allocator, std.math.maxInt(usize));
         defer allocator.free(data);
@@ -296,7 +297,11 @@ pub fn mtimeKey(allocator: std.mem.Allocator, directory: []const u8, key: []cons
     var buffer: [20]u8 = undefined;
     _ = try tbt.format(datetime, "CY-m-dThh:mm:ss.", &buffer);
     //------------------------------------------------------------
-    return try std.fmt.allocPrint(allocator, "{s}{d:0>9}Z", .{ buffer, @as(u64, @intCast(@mod(stat.mtime, 1_000_000_000))) });
+    return try std.fmt.allocPrint(
+        allocator,
+        "{s}{d:0>9}Z",
+        .{ buffer, @as(u64, @intCast(@mod(stat.mtime, 1_000_000_000))) },
+    );
     //------------------------------------------------------------
 }
 //--------------------------------------------------------------------------------

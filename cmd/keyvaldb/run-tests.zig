@@ -2,7 +2,7 @@
 //################################################################################
 //--------------------------------------------------------------------------------
 const std = @import("std");
-const unittest = @import("libs/unittest26052.zig");
+const unittest = @import("libs/unittest26057.zig");
 const kvdb = @import("main.zig");
 //--------------------------------------------------------------------------------
 const BRIGHT_ORANGE = "\x1B[38;5;214m";
@@ -279,6 +279,19 @@ pub fn main() !void {
             } else |_| {}
             //----------------------------------------
         }
+        //------------------------------------------------------------
+        _ = kvdb.removeKey(allocator, database_name, "k1") catch {};
+        _ = kvdb.removeKey(allocator, database_name, "k2") catch {};
+        _ = kvdb.removeKey(allocator, database_name, "k3") catch {};
+        _ = kvdb.removeKey(allocator, database_name, "k4") catch {};
+        //------------------------------------------------------------
+        const result_error = kvdb.listKeys(allocator, database_name);
+        //----------------------------------------
+        try ut.compareStringResultError("listKeys", result_error, "no key-value pairs exist\n", null);
+        //----------------------------------------
+        if (result_error) |result| {
+            defer allocator.free(result);
+        } else |_| {}
         //------------------------------------------------------------
     }
     //--------------------------------------------------------------------------------
