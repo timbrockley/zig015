@@ -180,6 +180,8 @@ pub fn listKeys(allocator: std.mem.Allocator, directory: []const u8) ![]const u8
             };
             defer allocator.free(value);
             //----------------------------------------
+            escapeString(value);
+            //----------------------------------------
             try buffer.writer(allocator).print("{s}  {s}\n", .{ key, value });
             //----------------------------------------
         }
@@ -234,7 +236,7 @@ pub fn setKey(allocator: std.mem.Allocator, directory: []const u8, key: []const 
     //------------------------------------------------------------
 }
 //--------------------------------------------------------------------------------
-pub fn getKey(allocator: std.mem.Allocator, directory: []const u8, key: []const u8) ![]const u8 {
+pub fn getKey(allocator: std.mem.Allocator, directory: []const u8, key: []const u8) ![]u8 {
     //------------------------------------------------------------
     try checkDirectoryPath(allocator, directory);
     //------------------------------------------------------------
@@ -405,6 +407,12 @@ pub fn checkKeyName(name: []const u8) bool {
     //------------------------------------------------------------
     return true;
     //------------------------------------------------------------
+}
+//--------------------------------------------------------------------------------
+pub fn escapeString(data: []u8) void {
+    for (data) |*char| {
+        if ((char.* >= 0x00 and char.* <= 0x20) or char.* == 0x7F) char.* = 0x20;
+    }
 }
 //--------------------------------------------------------------------------------
 pub fn exists(filepath: []const u8) bool {
