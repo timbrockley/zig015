@@ -20,7 +20,7 @@ start_time_ns: i128 = 0,
 //------------------------------------------------------------
 count_passed: usize = 0,
 count_failed: usize = 0,
-//------------------------------------------------------------
+//--------------------------------------------------------------------------------
 pub fn init(options: anytype) !Self {
     //------------------------------------------------------------
     var self = Self{};
@@ -110,6 +110,89 @@ pub fn compareStringSlice(self: *Self, name: []const u8, expected: []const u8, a
     //----------------------------------------------------------------------------
     try self.printLine();
     //----------------------------------------------------------------------------
+}
+//--------------------------------------------------------------------------------
+/// Checks string formatting.
+///
+/// d => Digits (0-9)
+/// D => Not Digits (0-9)
+///
+/// a => Uppercase or Lowercase Letters
+/// A => Not Uppercase or Lowercase Letters
+///
+/// n => Alphanumeric
+/// N => Not Alphanumeric
+///
+/// u => Uppercase Letters
+/// U => Not Uppercase Letters
+///
+/// l => Lowercase Letters
+/// L => Not Lowercase Letters
+///
+/// (Other characters ignored).
+pub fn compareStringFormat(self: *Self, name: []const u8, string: []const u8, format: []const u8) !void {
+    //------------------------------------------------------------
+
+    var pass_count: usize = 0;
+    //------------------------------------------------------------
+    if (string.len == format.len) {
+        //------------------------------------------------------------
+        for (string, format) |string_byte, format_byte| {
+            //------------------------------------------------------------
+            switch (format_byte) {
+                'd' => {
+                    if (std.ascii.isDigit(string_byte)) pass_count += 1;
+                },
+                'D' => {
+                    if (!std.ascii.isDigit(string_byte)) pass_count += 1;
+                },
+                'a' => {
+                    if (std.ascii.isAlphabetic(string_byte)) pass_count += 1;
+                },
+                'A' => {
+                    if (!std.ascii.isAlphabetic(string_byte)) pass_count += 1;
+                },
+                'n' => {
+                    if (std.ascii.isAlphanumeric(string_byte)) pass_count += 1;
+                },
+                'N' => {
+                    if (!std.ascii.isAlphanumeric(string_byte)) pass_count += 1;
+                },
+                'u' => {
+                    if (std.ascii.isUpper(string_byte)) pass_count += 1;
+                },
+                'U' => {
+                    if (!std.ascii.isUpper(string_byte)) pass_count += 1;
+                },
+                'l' => {
+                    if (std.ascii.isLower(string_byte)) pass_count += 1;
+                },
+                'L' => {
+                    if (!std.ascii.isLower(string_byte)) pass_count += 1;
+                },
+                else => {
+                    pass_count += 1;
+                },
+            }
+            //------------------------------------------------------------
+        }
+        //------------------------------------------------------------
+    }
+    //------------------------------------------------------------
+    if (string.len == format.len and pass_count == format.len) {
+        //------------------------------------------------------------
+        try self.printPass();
+        try self.stdout_print(": {s}\n", .{name});
+        //------------------------------------------------------------
+    } else {
+        //------------------------------------------------------------
+        try self.printFail();
+        try self.stdout_print(": {s}\n", .{name});
+        //------------------------------------------------------------
+    }
+    //------------------------------------------------------------
+    try self.printLine();
+    //------------------------------------------------------------
 }
 //--------------------------------------------------------------------------------
 pub fn compareByteSlice(self: *Self, name: []const u8, expected: []const u8, actual: []const u8) !void {
@@ -442,6 +525,14 @@ pub fn main() !void {
     // compareByteSlice pass
     //------------------------------------------------------------
     try ut.compareByteSlice("compareByteSlice pass", "hello", "hello");
+    //------------------------------------------------------------
+    // compareStringFormat pass
+    //------------------------------------------------------------
+    try ut.compareStringFormat("compareStringFormat pass", "2026-03-19T10:13:00.072978925Z", "dddd-dd-ddTdd:dd:dd.dddddddddZ");
+    //------------------------------------------------------------
+    // compareStringFormat fail
+    //------------------------------------------------------------
+    try ut.compareStringFormat("compareStringFormat fail", "2026-03-19T10:13:00.072978925Z", "");
     //------------------------------------------------------------
     // compareByteSlice fail
     //------------------------------------------------------------
