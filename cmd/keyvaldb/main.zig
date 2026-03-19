@@ -44,7 +44,7 @@ pub fn processArguments(allocator: std.mem.Allocator) ![]const u8 {
     //------------------------------------------------------------
     const _instruction = if (it.next()) |s| s else "";
     //------------------------------------------------------------
-    const Instruction = enum { create, repair, drop, list, set, get, mtime, remove };
+    const Instruction = enum { create, repair, drop, list, set, get, check, len, mtime, delete };
     const instruction = std.meta.stringToEnum(Instruction, _instruction) orelse {
         return error.InvalidInstruction;
     };
@@ -59,8 +59,10 @@ pub fn processArguments(allocator: std.mem.Allocator) ![]const u8 {
         .list => listKeys(allocator, directory),
         .set => setKey(allocator, directory, key, value),
         .get => getKey(allocator, directory, key),
+        .check => checkKey(allocator, directory, key),
+        .len => lenKey(allocator, directory, key),
         .mtime => mtimeKey(allocator, directory, key),
-        .remove => removeKey(allocator, directory, key),
+        .delete => deleteKey(allocator, directory, key),
     };
     //------------------------------------------------------------
 }
@@ -180,6 +182,8 @@ pub fn listKeys(allocator: std.mem.Allocator, directory: []const u8) ![]const u8
             };
             defer allocator.free(value);
             //----------------------------------------
+            escapeString(value);
+            //----------------------------------------
             try buffer.writer(allocator).print("{s}  {s}\n", .{ key, value });
             //----------------------------------------
         }
@@ -234,7 +238,7 @@ pub fn setKey(allocator: std.mem.Allocator, directory: []const u8, key: []const 
     //------------------------------------------------------------
 }
 //--------------------------------------------------------------------------------
-pub fn getKey(allocator: std.mem.Allocator, directory: []const u8, key: []const u8) ![]const u8 {
+pub fn getKey(allocator: std.mem.Allocator, directory: []const u8, key: []const u8) ![]u8 {
     //------------------------------------------------------------
     try checkDirectoryPath(allocator, directory);
     //------------------------------------------------------------
@@ -251,6 +255,8 @@ pub fn getKey(allocator: std.mem.Allocator, directory: []const u8, key: []const 
     defer allocator.free(key_filepath);
     //------------------------------------------------------------
     if (exists(key_filepath) and !isFile(key_filepath)) return error.InvalidKeyFile;
+    //------------------------------------------------------------
+    if (!exists(key_filepath)) return "";
     //------------------------------------------------------------
     const file = std.fs.cwd().openFile(key_filepath, .{}) catch |err| {
         if (err == error.FileNotFound) return try allocator.alloc(u8, 0);
@@ -286,6 +292,8 @@ pub fn mtimeKey(allocator: std.mem.Allocator, directory: []const u8, key: []cons
     //------------------------------------------------------------
     if (exists(key_filepath) and !isFile(key_filepath)) return error.InvalidKeyFile;
     //------------------------------------------------------------
+    if (!exists(key_filepath)) return error.KeyDoesNotExist;
+    //------------------------------------------------------------
     const file = try std.fs.cwd().openFile(key_filepath, .{});
     defer file.close();
     //------------------------------------------------------------
@@ -305,7 +313,7 @@ pub fn mtimeKey(allocator: std.mem.Allocator, directory: []const u8, key: []cons
     //------------------------------------------------------------
 }
 //--------------------------------------------------------------------------------
-pub fn removeKey(allocator: std.mem.Allocator, directory: []const u8, key: []const u8) ![]const u8 {
+pub fn deleteKey(allocator: std.mem.Allocator, directory: []const u8, key: []const u8) ![]const u8 {
     //------------------------------------------------------------
     try checkDirectoryPath(allocator, directory);
     //------------------------------------------------------------
@@ -331,6 +339,61 @@ pub fn removeKey(allocator: std.mem.Allocator, directory: []const u8, key: []con
     //------------------------------------------------------------
 }
 //--------------------------------------------------------------------------------
+pub fn checkKey(allocator: std.mem.Allocator, directory: []const u8, key: []const u8) ![]const u8 {
+    //------------------------------------------------------------
+    try checkDirectoryPath(allocator, directory);
+    //------------------------------------------------------------
+    if (!exists(directory)) return error.DatabaseDoesNotExist;
+    //------------------------------------------------------------
+    const config_filepath = try std.fs.path.join(allocator, &[_][]const u8{ directory, config_filename });
+    defer allocator.free(config_filepath);
+    //------------------------------------------------------------
+    if (!exists(config_filepath)) return error.InvalidConfigFile;
+    //------------------------------------------------------------
+    if (!checkKeyName(key)) return error.InvalidKeyName;
+    //------------------------------------------------------------
+    const key_filepath = try std.fs.path.join(allocator, &[_][]const u8{ directory, key });
+    defer allocator.free(key_filepath);
+    //------------------------------------------------------------
+    if (!exists(key_filepath)) return error.KeyDoesNotExist;
+    //------------------------------------------------------------
+    return try allocator.alloc(u8, 0);
+    //------------------------------------------------------------
+}
+//--------------------------------------------------------------------------------
+pub fn lenKey(allocator: std.mem.Allocator, directory: []const u8, key: []const u8) ![]const u8 {
+    //------------------------------------------------------------
+    try checkDirectoryPath(allocator, directory);
+    //------------------------------------------------------------
+    if (!exists(directory)) return error.DatabaseDoesNotExist;
+    //------------------------------------------------------------
+    const config_filepath = try std.fs.path.join(allocator, &[_][]const u8{ directory, config_filename });
+    defer allocator.free(config_filepath);
+    //------------------------------------------------------------
+    if (!exists(config_filepath)) return error.InvalidConfigFile;
+    //------------------------------------------------------------
+    if (!checkKeyName(key)) return error.InvalidKeyName;
+    //------------------------------------------------------------
+    const key_filepath = try std.fs.path.join(allocator, &[_][]const u8{ directory, key });
+    defer allocator.free(key_filepath);
+    //------------------------------------------------------------
+    if (exists(key_filepath) and !isFile(key_filepath)) return error.InvalidKeyFile;
+    //------------------------------------------------------------
+    if (!exists(key_filepath)) return error.KeyDoesNotExist;
+    //------------------------------------------------------------
+    const file = try std.fs.cwd().openFile(key_filepath, .{});
+    defer file.close();
+    //------------------------------------------------------------
+    const stat = try file.stat();
+    //------------------------------------------------------------
+    return try std.fmt.allocPrint(
+        allocator,
+        "{}",
+        .{stat.size},
+    );
+    //------------------------------------------------------------
+}
+//--------------------------------------------------------------------------------
 pub fn printHelp(allocator: std.mem.Allocator, cmd_name: []const u8) ![]const u8 {
     //------------------------------------------------------------
     var buffer = std.ArrayList(u8){};
@@ -345,11 +408,13 @@ pub fn printHelp(allocator: std.mem.Allocator, cmd_name: []const u8) ![]const u8
         \\{s} <DATABASE_DIRECTORY> set <KEY> <VALUE>
         \\{s} <DATABASE_DIRECTORY> set <KEY> <<< "STDIN_DATA"
         \\{s} <DATABASE_DIRECTORY> get <KEY>
+        \\{s} <DATABASE_DIRECTORY> check <KEY>
+        \\{s} <DATABASE_DIRECTORY> len <KEY>
         \\{s} <DATABASE_DIRECTORY> mtime <KEY>
-        \\{s} <DATABASE_DIRECTORY> remove <KEY>
+        \\{s} <DATABASE_DIRECTORY> delete <KEY>
         \\
         \\
-    , .{cmd_name} ** 9);
+    , .{cmd_name} ** 11);
     //------------------------------------------------------------
     return try buffer.toOwnedSlice(allocator);
     //------------------------------------------------------------
@@ -381,7 +446,7 @@ pub fn checkDirectoryName(name: []const u8) bool {
     //------------------------------------------------------------
     for (name) |char| {
         switch (char) {
-            '.', '_', '0'...'9', 'A'...'Z', 'a'...'z' => continue,
+            '.', 'A'...'Z', 'a'...'z', '0'...'9', '_', '-' => continue,
             else => return false,
         }
     }
@@ -398,13 +463,19 @@ pub fn checkKeyName(name: []const u8) bool {
     //------------------------------------------------------------
     for (name) |char| {
         switch (char) {
-            '_', '0'...'9', 'A'...'Z', 'a'...'z' => continue,
+            'A'...'Z', 'a'...'z', '0'...'9', '_', '-' => continue,
             else => return false,
         }
     }
     //------------------------------------------------------------
     return true;
     //------------------------------------------------------------
+}
+//--------------------------------------------------------------------------------
+pub fn escapeString(data: []u8) void {
+    for (data) |*char| {
+        if ((char.* >= 0x00 and char.* <= 0x20) or char.* == 0x7F) char.* = 0x20;
+    }
 }
 //--------------------------------------------------------------------------------
 pub fn exists(filepath: []const u8) bool {

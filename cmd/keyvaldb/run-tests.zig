@@ -224,24 +224,24 @@ pub fn main() !void {
     //--------------------------------------------------------------------------------
     //################################################################################
     //--------------------------------------------------------------------------------
-    // removeKey
+    // deleteKey
     //--------------------------------------------------------------------------------
     {
         //------------------------------------------------------------
         const test_cases = [_]struct { name: []const u8, directory: []const u8, key: []const u8, expected_result: []const u8, expected_error: ?anyerror }{
-            .{ .name = "removeKey: error.InvalidDirectoryLocation", .directory = "", .key = "", .expected_result = "", .expected_error = error.InvalidDirectoryLocation },
-            .{ .name = "removeKey: error.InvalidDirectoryLocation", .directory = "/", .key = "", .expected_result = "", .expected_error = error.InvalidDirectoryLocation },
-            .{ .name = "removeKey: error.DatabaseDoesNotExist", .directory = "test1", .key = "", .expected_result = "", .expected_error = error.DatabaseDoesNotExist },
-            .{ .name = "removeKey: error.InvalidKeyName", .directory = "test", .key = "", .expected_result = "", .expected_error = error.InvalidKeyName },
-            .{ .name = "removeKey: error.InvalidKeyName", .directory = "test", .key = "#", .expected_result = "", .expected_error = error.InvalidKeyName },
-            .{ .name = "removeKey: test k2", .directory = "test", .key = "k2", .expected_result = "", .expected_error = null },
+            .{ .name = "deleteKey: error.InvalidDirectoryLocation", .directory = "", .key = "", .expected_result = "", .expected_error = error.InvalidDirectoryLocation },
+            .{ .name = "deleteKey: error.InvalidDirectoryLocation", .directory = "/", .key = "", .expected_result = "", .expected_error = error.InvalidDirectoryLocation },
+            .{ .name = "deleteKey: error.DatabaseDoesNotExist", .directory = "test1", .key = "", .expected_result = "", .expected_error = error.DatabaseDoesNotExist },
+            .{ .name = "deleteKey: error.InvalidKeyName", .directory = "test", .key = "", .expected_result = "", .expected_error = error.InvalidKeyName },
+            .{ .name = "deleteKey: error.InvalidKeyName", .directory = "test", .key = "#", .expected_result = "", .expected_error = error.InvalidKeyName },
+            .{ .name = "deleteKey: test k2", .directory = "test", .key = "k2", .expected_result = "", .expected_error = null },
         };
         //------------------------------------------------------------
         inline for (test_cases) |test_case| {
             //----------------------------------------
             try ut.compareStringResultError(
                 test_case.name,
-                kvdb.removeKey(allocator, test_case.directory, test_case.key),
+                kvdb.deleteKey(allocator, test_case.directory, test_case.key),
                 test_case.expected_result,
                 test_case.expected_error,
             );
@@ -280,10 +280,10 @@ pub fn main() !void {
             //----------------------------------------
         }
         //------------------------------------------------------------
-        _ = kvdb.removeKey(allocator, database_name, "k1") catch {};
-        _ = kvdb.removeKey(allocator, database_name, "k2") catch {};
-        _ = kvdb.removeKey(allocator, database_name, "k3") catch {};
-        _ = kvdb.removeKey(allocator, database_name, "k4") catch {};
+        _ = kvdb.deleteKey(allocator, database_name, "k1") catch {};
+        _ = kvdb.deleteKey(allocator, database_name, "k2") catch {};
+        _ = kvdb.deleteKey(allocator, database_name, "k3") catch {};
+        _ = kvdb.deleteKey(allocator, database_name, "k4") catch {};
         //------------------------------------------------------------
         const result_error = kvdb.listKeys(allocator, database_name);
         //----------------------------------------
