@@ -214,6 +214,26 @@ pub fn main() !void {
         std.debug.print("\n", .{});
     }
     //------------------------------------------------------------
+    {
+        //------------------------------------------------------------
+        // setAsCwd
+        //------------------------------------------------------------
+
+        var chdir = try std.fs.cwd().openDir("test", .{});
+        defer chdir.close();
+        try chdir.setAsCwd();
+
+        var opendir_handle = try dir.openDir(".", .{ .iterate = true });
+        defer opendir_handle.close();
+
+        var dirIterator = opendir_handle.iterate();
+        while (try dirIterator.next()) |dirEntry| {
+            std.debug.print("iterate: {}: {s}\n", .{ dirEntry.kind, dirEntry.name });
+        }
+
+        std.debug.print("\n", .{});
+    }
+    //------------------------------------------------------------
 }
 
 //------------------------------------------------------------
