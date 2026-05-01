@@ -1,7 +1,7 @@
 //--------------------------------------------------------------------------------
 const std = @import("std");
 const unittest = @import("libs/unittest.zig");
-const obf = @import("crypto.zig");
+const crypto = @import("crypto.zig");
 //--------------------------------------------------------------------------------
 const BRIGHT_ORANGE = "\x1B[38;5;214m";
 const RESET = "\x1B[0m";
@@ -38,7 +38,7 @@ pub fn main() !void {
         //----------------------------------------
         inline for (test_cases) |test_case| {
             //----------------------------------------
-            if (obf.ObfuscateV0.obfuscate(allocator, test_case.data, .{})) |result| {
+            if (crypto.ObfuscateV0.obfuscate(allocator, test_case.data, .{})) |result| {
                 //----------------------------------------
                 if (!std.mem.eql(u8, result, test_case.expected)) {
                     //----------------------------------------
@@ -82,7 +82,7 @@ pub fn main() !void {
         //----------------------------------------
         inline for (test_cases) |test_case| {
             //----------------------------------------
-            const result = obf.ObfuscateV0.slideByte(test_case.byte);
+            const result = crypto.ObfuscateV0.slideByte(test_case.byte);
             //----------------------------------------
             if (result != test_case.expected) {
                 fail_count += 1;
@@ -101,7 +101,7 @@ pub fn main() !void {
         const test_cases = [_]struct {
             data: []const u8,
             expected: []const u8,
-            encoding: obf.ObfuscateV0.Encoding,
+            encoding: crypto.ObfuscateV0.Encoding,
         }{
             .{ .data = "", .expected = "", .encoding = .default },
             .{ .data = "Aq\x16\x15\x12~|zwB>qF", .expected = "]---t-n-r-s-q-d-a-b-g--X", .encoding = .default },
@@ -112,7 +112,7 @@ pub fn main() !void {
         //----------------------------------------
         inline for (test_cases) |test_case| {
             //----------------------------------------
-            if (obf.ObfuscateV0.encode(allocator, test_case.data, .{ .encoding = test_case.encoding })) |result| {
+            if (crypto.ObfuscateV0.encode(allocator, test_case.data, .{ .encoding = test_case.encoding })) |result| {
                 //----------------------------------------
                 if (!std.mem.eql(u8, result, test_case.expected)) {
                     //----------------------------------------
@@ -147,7 +147,7 @@ pub fn main() !void {
         const test_cases = [_]struct {
             data: []const u8,
             expected: []const u8,
-            encoding: obf.ObfuscateV0.Encoding,
+            encoding: crypto.ObfuscateV0.Encoding,
         }{
             .{ .data = "", .expected = "", .encoding = .default },
             .{ .data = "]---t-n-r-s-q-d-a-b-g--X", .expected = "Aq\x16\x15\x12~|zwB>qF", .encoding = .default },
@@ -158,7 +158,7 @@ pub fn main() !void {
         //----------------------------------------
         inline for (test_cases) |test_case| {
             //----------------------------------------
-            if (obf.ObfuscateV0.decode(allocator, test_case.data, .{ .encoding = test_case.encoding })) |result| {
+            if (crypto.ObfuscateV0.decode(allocator, test_case.data, .{ .encoding = test_case.encoding })) |result| {
                 //----------------------------------------
                 if (!std.mem.eql(u8, result, test_case.expected)) {
                     //----------------------------------------
@@ -211,7 +211,7 @@ pub fn main() !void {
         //----------------------------------------
         inline for (test_cases) |test_case| {
             //----------------------------------------
-            if (obf.ObfuscateV4.obfuscate(allocator, test_case.data, .{ .mix_chars = test_case.mix_chars })) |result| {
+            if (crypto.ObfuscateV4.obfuscate(allocator, test_case.data, .{ .mix_chars = test_case.mix_chars })) |result| {
                 //----------------------------------------
                 if (!std.mem.eql(u8, result, test_case.expected)) {
                     //----------------------------------------
@@ -255,7 +255,7 @@ pub fn main() !void {
         //----------------------------------------
         inline for (test_cases) |test_case| {
             //----------------------------------------
-            const result = obf.ObfuscateV4.slideByte(test_case.byte);
+            const result = crypto.ObfuscateV4.slideByte(test_case.byte);
             //----------------------------------------
             if (result != test_case.expected) {
                 fail_count += 1;
@@ -274,7 +274,7 @@ pub fn main() !void {
         const test_cases = [_]struct {
             data: []const u8,
             expected: []const u8,
-            encoding: obf.ObfuscateV4.Encoding,
+            encoding: crypto.ObfuscateV4.Encoding,
             mix_chars: bool,
         }{
             .{ .data = "", .expected = "", .encoding = .default, .mix_chars = false },
@@ -293,7 +293,7 @@ pub fn main() !void {
         //----------------------------------------
         inline for (test_cases) |test_case| {
             //----------------------------------------
-            if (obf.ObfuscateV4.encode(allocator, test_case.data, .{ .encoding = test_case.encoding, .mix_chars = test_case.mix_chars })) |result| {
+            if (crypto.ObfuscateV4.encode(allocator, test_case.data, .{ .encoding = test_case.encoding, .mix_chars = test_case.mix_chars })) |result| {
                 //----------------------------------------
                 if (!std.mem.eql(u8, result, test_case.expected)) {
                     //----------------------------------------
@@ -328,7 +328,7 @@ pub fn main() !void {
         const test_cases = [_]struct {
             data: []const u8,
             expected: []const u8,
-            encoding: obf.ObfuscateV4.Encoding,
+            encoding: crypto.ObfuscateV4.Encoding,
             mix_chars: bool,
         }{
             .{ .data = "", .expected = "", .encoding = .default, .mix_chars = false },
@@ -347,7 +347,7 @@ pub fn main() !void {
         //----------------------------------------
         inline for (test_cases) |test_case| {
             //----------------------------------------
-            if (obf.ObfuscateV4.decode(allocator, test_case.data, .{ .encoding = test_case.encoding, .mix_chars = test_case.mix_chars })) |result| {
+            if (crypto.ObfuscateV4.decode(allocator, test_case.data, .{ .encoding = test_case.encoding, .mix_chars = test_case.mix_chars })) |result| {
                 //----------------------------------------
                 if (!std.mem.eql(u8, result, test_case.expected)) {
                     //----------------------------------------
@@ -413,7 +413,7 @@ pub fn main() !void {
         //----------------------------------------
         inline for (test_cases) |test_case| {
             //----------------------------------------
-            if (obf.ObfuscateV5.obfuscate(allocator, test_case.data, .{})) |result| {
+            if (crypto.ObfuscateV5.obfuscate(allocator, test_case.data, .{})) |result| {
                 //----------------------------------------
                 if (!std.mem.eql(u8, result, test_case.expected)) {
                     //----------------------------------------
@@ -457,7 +457,7 @@ pub fn main() !void {
         //----------------------------------------
         inline for (test_cases) |test_case| {
             //----------------------------------------
-            const result = obf.ObfuscateV5.slideByte(test_case.byte);
+            const result = crypto.ObfuscateV5.slideByte(test_case.byte);
             //----------------------------------------
             if (result != test_case.expected) {
                 fail_count += 1;
@@ -476,7 +476,7 @@ pub fn main() !void {
         const test_cases = [_]struct {
             data: []const u8,
             expected: []const u8,
-            encoding: obf.ObfuscateV5.Encoding,
+            encoding: crypto.ObfuscateV5.Encoding,
         }{
             .{ .data = "", .expected = "", .encoding = .default },
             .{ .data = "hello", .expected = "6229/", .encoding = .default },
@@ -493,7 +493,7 @@ pub fn main() !void {
         //----------------------------------------
         inline for (test_cases) |test_case| {
             //----------------------------------------
-            if (obf.ObfuscateV5.encode(allocator, test_case.data, .{ .encoding = test_case.encoding })) |result| {
+            if (crypto.ObfuscateV5.encode(allocator, test_case.data, .{ .encoding = test_case.encoding })) |result| {
                 //----------------------------------------
                 if (!std.mem.eql(u8, result, test_case.expected)) {
                     //----------------------------------------
@@ -528,7 +528,7 @@ pub fn main() !void {
         const test_cases = [_]struct {
             data: []const u8,
             expected: []const u8,
-            encoding: obf.ObfuscateV5.Encoding,
+            encoding: crypto.ObfuscateV5.Encoding,
         }{
             .{ .data = "", .expected = "", .encoding = .default },
             .{ .data = "6229/", .expected = "hello", .encoding = .default },
@@ -545,7 +545,7 @@ pub fn main() !void {
         //----------------------------------------
         inline for (test_cases) |test_case| {
             //----------------------------------------
-            if (obf.ObfuscateV5.decode(allocator, test_case.data, .{ .encoding = test_case.encoding })) |result| {
+            if (crypto.ObfuscateV5.decode(allocator, test_case.data, .{ .encoding = test_case.encoding })) |result| {
                 //----------------------------------------
                 if (!std.mem.eql(u8, result, test_case.expected)) {
                     //----------------------------------------
@@ -591,7 +591,7 @@ pub fn main() !void {
         //----------------------------------------
         inline for (test_cases) |test_case| {
             //----------------------------------------
-            if (obf.ObfuscateXOR.obfuscate(allocator, test_case.data, value, .{})) |result| {
+            if (crypto.ObfuscateXOR.obfuscate(allocator, test_case.data, value, .{})) |result| {
                 //----------------------------------------
                 if (!std.mem.eql(u8, result, test_case.expected)) {
                     //----------------------------------------
@@ -622,7 +622,7 @@ pub fn main() !void {
         const test_cases = [_]struct {
             data: []const u8,
             expected: []const u8,
-            encoding: obf.ObfuscateXOR.Encoding,
+            encoding: crypto.ObfuscateXOR.Encoding,
         }{
             .{ .data = "", .expected = "", .encoding = .default },
             .{ .data = &[_]u8{ 247, 135, 163, 160, 167, 138, 136, 142, 141, 246, 202, 135, 242 }, .expected = "]---t-n-r-s-q-d-a-b-g--X", .encoding = .default },
@@ -638,7 +638,7 @@ pub fn main() !void {
         //----------------------------------------
         inline for (test_cases) |test_case| {
             //----------------------------------------
-            if (obf.ObfuscateXOR.encode(allocator, test_case.data, value, .{ .encoding = test_case.encoding })) |result| {
+            if (crypto.ObfuscateXOR.encode(allocator, test_case.data, value, .{ .encoding = test_case.encoding })) |result| {
                 //----------------------------------------
                 if (!std.mem.eql(u8, result, test_case.expected)) {
                     //----------------------------------------
@@ -674,7 +674,7 @@ pub fn main() !void {
         const test_cases = [_]struct {
             data: []const u8,
             expected: []const u8,
-            encoding: obf.ObfuscateXOR.Encoding,
+            encoding: crypto.ObfuscateXOR.Encoding,
         }{
             .{ .data = "", .expected = "", .encoding = .default },
             .{ .data = "]---t-n-r-s-q-d-a-b-g--X", .expected = &[_]u8{ 247, 135, 163, 160, 167, 138, 136, 142, 141, 246, 202, 135, 242 }, .encoding = .default },
@@ -689,7 +689,7 @@ pub fn main() !void {
         //----------------------------------------
         inline for (test_cases) |test_case| {
             //----------------------------------------
-            if (obf.ObfuscateXOR.decode(allocator, test_case.data, value, .{ .encoding = test_case.encoding })) |result| {
+            if (crypto.ObfuscateXOR.decode(allocator, test_case.data, value, .{ .encoding = test_case.encoding })) |result| {
                 //----------------------------------------
                 if (!std.mem.eql(u8, result, test_case.expected)) {
                     //----------------------------------------
