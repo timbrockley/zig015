@@ -1,4 +1,4 @@
-version: '3'
+version: "3"
 
 vars:
   CACHE_PATH: ".zig-cache"
@@ -12,10 +12,14 @@ tasks:
   build:
     dir: "{{.OUTPUT_PATH}}"
     cmds:
-      - zig015 build-exe ../main.zig -femit-bin=sqlite-zig -lc -lsqlite3 -fstrip -O ReleaseSmall -mcpu=baseline
+      - zig015 build-exe ../main.zig -femit-bin=main -lc -lsqlite3 -fstrip -O ReleaseSmall -mcpu=baseline
 
-  run:
-    deps: [build]
+  debug:
     dir: "{{.OUTPUT_PATH}}"
     cmds:
-      - ./sqlite-zig {{.CLI_ARGS}}
+      - zig015 build-exe ../main.zig -femit-bin=main -lc -lsqlite3 -fstrip -O Debug -mcpu=baseline
+
+  run:
+    dir: "{{.OUTPUT_PATH}}"
+    cmds:
+      - ./main {{.CLI_ARGS}}

@@ -8,14 +8,12 @@ const c = @cImport({
     @cInclude("sqlite3.h");
 });
 //--------------------------------------------------------------------------------
-const OUTPUT_PATH = "zig-out";
+const DATABASE_FILENAME = "test.db";
 //--------------------------------------------------------------------------------
 pub fn main() !u8 {
     //------------------------------------------------------------
-    const database_filename = "test.db";
-    //------------------------------------------------------------
-    var db: ?*c.sqlite3 = undefined;
-    var rc = c.sqlite3_open(database_filename, &db);
+    var db: ?*c.sqlite3 = null;
+    var rc = c.sqlite3_open(DATABASE_FILENAME, &db);
     defer _ = c.sqlite3_close(db);
     if (rc != c.SQLITE_OK) {
         std.debug.print("Cannot open database: {s}\n", .{c.sqlite3_errmsg(db)});
