@@ -21,5 +21,8 @@ tasks:
 
   run:
     dir: "{{.OUTPUT_PATH}}"
-    cmds:
-      - ./main {{.CLI_ARGS}}
+    cmd: zig015 run ../main.zig -lc -lsqlite3
+
+  test:
+    dir: "{{.OUTPUT_PATH}}"
+    cmd: zig015 run ../main.zig -lc -lsqlite3
